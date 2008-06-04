@@ -1,0 +1,12 @@
+Testsuite: com.ideyatech.util.StringUtilTest
+Tests run: 9, Failures: 0, Errors: 0, Time elapsed: 0.091 sec
+
+Testcase: testStringToDate took 0.022 sec
+Testcase: testStringToDateException took 0.003 sec
+Testcase: testDateToString took 0.002 sec
+Testcase: testConvertShortDate took 0.004 sec
+Testcase: testConvertShortDateException took 0.004 sec
+Testcase: testConvertFlexibleDate took 0.014 sec
+Testcase: testConvertFlexibleDateException took 0.003 sec
+Testcase: testNullableDates took 0.003 sec
+Testcase: testEncryptDecrypt took 0.01 sec
