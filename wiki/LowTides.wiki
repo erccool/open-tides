@@ -9,7 +9,7 @@ Low-tides is an automation of YSlow recommendation #1 and #10. The tool accepts 
 
 To use Low-tides:
 
-Usage: java -jar low-tide.jar [options] [input file]
+Usage: java -jar low-tide.jar <options> <input file>
 
 Global Options
   -h, --help                Displays this information
