@@ -3,7 +3,16 @@
 
 = Introduction =
 
-Low-tides is an automation of YSlow recommendation #1 and #10. The tool accepts html path and extracts js/css includes for merging and minification. The tool is an extension of YUI Compressor. The key difference is low-tides extracts js and css includes that are in sequence and merge the files accordingly. 
+Low-tides is an automation of YSlow recommendation #1 (Reduce Http Request) and #10 (Minimize JS/CSS). The tool accepts html path and extracts js/css includes for merging and minification. 
+
+Some of the reasons why we developed this tool are as follows:
+
+# Improve page loads by reducing http request and minimizing js size. 
+# Perform step #1 with minimal action for the developer and yet maintain proper version.
+
+Low-tides processes html files and looks for js and css includes. It then combines multiple js in sequence into 1 js file and perform minification. Based on our own test, load time has improved by at least 30% after using low-tides.
+ 
+This tool is an extension of YUI Compressor. 
 
 = Details =
 
