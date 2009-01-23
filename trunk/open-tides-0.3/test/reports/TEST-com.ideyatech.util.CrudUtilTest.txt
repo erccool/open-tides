@@ -1,0 +1,5 @@
+Testsuite: com.ideyatech.util.CrudUtilTest
+Tests run: 2, Failures: 0, Errors: 0, Time elapsed: 0.083 sec
+
+Testcase: testGetPropertyName took 0.058 sec
+Testcase: testBuildJpaQueryString took 0.004 sec
