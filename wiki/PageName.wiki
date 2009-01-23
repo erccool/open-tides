@@ -1,0 +1,14 @@
+#summary Updates on Version 0.3
+
+= Introduction =
+
+We are glad to release the third version of open-tides with updates to make the framework more stable as implemented on actual projects. 
+
+= Details =
+
+* Added support for database evolve scripts.
+* Added support for user group permissions.
+* Updated look and feel. Blue is the new green.
+* Fixes on query by example.
+* Fixes on incorrect logging due to synchronization issues on Hibernate interceptor.
+* More complete example. See ot-default as your project starting point
