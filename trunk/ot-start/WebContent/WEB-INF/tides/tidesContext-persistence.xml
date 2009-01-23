@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">         
+     
+     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource"><ref bean="dataSource"/></property>
+		<property name="jpaDialect">
+           	<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+        </property>
+		<property name="persistenceUnitName">
+			<value>hibernateConfig</value>
+		</property>
+	</bean> 
+     
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+	</bean>
+	
+	<!-- enable the configuration of transactional behavior based on annotations -->
+	<tx:annotation-driven />
+    
+    <!-- Hibernate Utility Option using ideyatech.properties
+	<bean id="hibernateUtil" class="com.ideyatech.core.util.HibernateUtil">
+		<property name="driverClass" value="${database.driver}" />
+		<property name="url" value="${database.url}" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>	
+    -->
+
+    <!-- Hibernate Utility -->
+	<bean id="hibernateUtil" class="org.opentides.util.HibernateUtil" init-method="initialize">
+		<property name="jndiPath" value="${database.jndi}" />
+	</bean>	
+    
+	<!--  Property file containing custom JPQL queries -->
+	<bean id="jpqlProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:resources/jpql/core.properties</value>
+				<value>${jpql.custom.properties}</value>
+			</list>
+		</property>
+	</bean>	
+	
+	<!-- Spring container will act as a JPA container and inject an EntityManager from your EntityManagerFactory.  -->
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+	
+	<!-- Spring's exception translation -->
+	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+	
+	<!--  DAOs -->
+	<bean id="baseDAO"
+		class="org.opentides.persistence.impl.BaseEntityDAOJpaImpl" abstract="true">
+		<property name="properties">
+			<ref bean="jpqlProperties" />
+		</property>
+		<property name="securityFilter">
+			<ref bean="securityFilterMap" />
+		</property>
+	</bean>
+	
+	<!-- Schema evolve -->
+	<bean id="evolveManager" class="org.opentides.persistence.evolve.DBEvolveManager"
+		autowire="byName">
+		<property name="evolveList">
+			<ref bean="evolveList" />
+		</property>
+	</bean>
+</beans>
