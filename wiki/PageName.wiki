@@ -12,4 +12,4 @@ We are glad to release the third version of open-tides with updates to make the 
   * Fixes on query by example.
   * Fixes on incorrect logging due to synchronization issues on Hibernate interceptor.
   * Email sending through independent quartz jobs to avoid delayed response.  
-  * More complete example. See ot-default as your project starting point.
+  * More complete example. See ot-start as your project starting point.
