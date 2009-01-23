@@ -11,4 +11,5 @@ We are glad to release the third version of open-tides with updates to make the 
   * Updated look and feel. Blue is the new green.
   * Fixes on query by example.
   * Fixes on incorrect logging due to synchronization issues on Hibernate interceptor.
-  * More complete example. See ot-default as your project starting point
+  * Email sending through independent quartz jobs to avoid delayed response.  
+  * More complete example. See ot-default as your project starting point.
