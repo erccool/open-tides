@@ -1,0 +1,10 @@
+#summary Open-Tides Tutorial for Configuration.
+
+= Introduction =
+
+ The goal of this tutorial is to describe and demonstrate to software developers and aspiring programmers what configurations must be done in order for an application to run smoothly.
+
+ This tutorial uses the Apache Ant build tool within the Eclipse IDE. If another build tool or IDE is to be used, adjust accordingly.
+
+
+= Configuration =
