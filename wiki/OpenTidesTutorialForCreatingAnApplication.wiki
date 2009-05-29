@@ -93,6 +93,5 @@ private String civilStatus;
  Once the bean is created and the proper annotations are in place, the final step is to generate the CRUD pages. To do so, you only need to do two major tasks:
     # Include the servlet-api.jar library in the Java Build Path of the project, if it has not yet been included. Ot-default requires HttpServletRequest.class, which is located within that library. Alternatively, the Apache Tomcat Server Runtime library contains that necessary file, and that whole .jar file can be included instead.
     # Open build.xml using the APACHE ANT build tool and run generate.
-or, alternatively,
-     * Open the APACHE ANT VIEW, click on ADD BUILDFILES and choose build.xml under OT-DEFAULT.
+     * or Open the APACHE ANT VIEW, click on ADD BUILDFILES and choose build.xml under OT-DEFAULT.
  After the code generation is finished, your simple application is ready to run.
