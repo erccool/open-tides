@@ -1,4 +1,4 @@
-#summary Open-Tides Tutorial for Configuration.
+#summary Open-Tides Tutorial for Configuration
 
 <wiki:toc max_depth="3" />
 
