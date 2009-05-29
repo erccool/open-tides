@@ -1,10 +1,35 @@
 #summary Open-Tides Tutorial for Configuration.
 
-= Introduction =
+=1 Introduction =
 
  The goal of this tutorial is to describe and demonstrate to software developers and aspiring programmers what configurations must be done in order for an application to run smoothly.
 
  This tutorial uses the Apache Ant build tool within the Eclipse IDE. If another build tool or IDE is to be used, adjust accordingly.
 
 
-= Configuration =
+=2 Configuration =
+
+==2.1 Import the Project Framework==
+ To set up the IDE, import the project framework first. To do so, do the following:
+  # Go to the FILE menu and click on IMPORT.
+  # Click on the GENERAL folder and then EXISTING PROJECTS INTO WORKSPACE.
+  # Click NEXT
+  # Click on SELECT ARCHIVE FILE and browse for the zipped file previously acquired.
+  # Once done, press FINISH.
+
+==2.2 Setup Apache Tomcat==
+ After importing the project framework, setup the Apache Tomcat server by adding it through . To do so, do the following:
+  # Click on the FILE menu.
+  # Choose NEW, then OTHER….
+  # In the Wizard, choose SERVER under the SERVER option. Or you can go to the SERVER tab on the lower right section of your window, right click on the white space and choose NEW, then SERVER.
+  # Click NEXT. 
+  # Define a new server.
+   # Under SELECT THE SERVER TYPE, browse for Apache Tomcat 5.5 Server or later.
+   # Leave the rest of the other values and click NEXT.
+   # Click on BROWSE… to search for the Tomcat installation directory.
+   # Once you’re done, click FINISH.
+  # Click Next to proceed to ADD OR REMOVE PROJECTS.
+  # Under AVAILABLE PROJECTS on the left, locate the ot-default project and click ADD to add the project to the list of CONFIGURED PROJECTS to the right.
+  # Click FINISH when done.
+  # The Tomcat Server will be configured and will be shown under the SERVERS tab.
+ If the Servers tab is not displayed, enable it by going to WINDOW, SHOW VIEW, and then SERVERS.
