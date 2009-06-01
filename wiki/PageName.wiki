@@ -1,4 +1,5 @@
 #summary Updates on Version 0.3
+#labels Deprecated
 
 = Introduction =
 
