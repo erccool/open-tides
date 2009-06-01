@@ -1,0 +1,25 @@
+#summary open-tides releases
+
+= Introduction =
+
+This page contains the current and previous releases of open-tides.
+
+
+= Details =
+
+==`open-tides 0.4` ==
+ ===Release date:===
+  May 29, 2009
+
+ ===Updates:===
+  * Added code generation for Dao, Service, Controller and .jsp pages.
+  * Added javadocs api.
+
+==`open-tides 0.3`==
+ ===Release date:===
+  date
+
+ ===Updates:===
+
+  * blank.
+  * blank2.
