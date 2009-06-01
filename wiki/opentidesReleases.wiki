@@ -1,4 +1,5 @@
 #summary open-tides releases
+#labels Featured
 
 = Introduction =
 
@@ -14,6 +15,9 @@ This page contains the current and previous releases of open-tides.
  ===Updates:===
   * Added code generation for Dao, Service, Controller and .jsp pages.
   * Added javadocs api.
+
+ ===Download here:
+  * [http://open-tides.googlecode.com/files/opentides-0.4.jar open-tides 0.4]
 
 ==`open-tides 0.3`==
  ===Release date:===
