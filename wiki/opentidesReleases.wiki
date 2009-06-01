@@ -16,7 +16,7 @@ This page contains the current and previous releases of open-tides.
   * Added code generation for Dao, Service, Controller and .jsp pages.
   * Added javadocs api.
 
- ===Download here:
+ ===Download here:===
   * [http://open-tides.googlecode.com/files/opentides-0.4.jar open-tides 0.4]
 
 ==`open-tides 0.3`==
@@ -32,3 +32,6 @@ This page contains the current and previous releases of open-tides.
   * Fixes on incorrect logging due to synchronization issues on Hibernate interceptor.
   * Email sending through independent quartz jobs to avoid delayed response.
   * More complete example. See ot-start as your project starting point.
+
+===Download here:===
+  * [http://open-tides.googlecode.com/files/opentides-0.3.jar open-tides 0.3]
