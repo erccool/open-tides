@@ -33,5 +33,5 @@ This page contains the current and previous releases of open-tides.
   * Email sending through independent quartz jobs to avoid delayed response.
   * More complete example. See ot-start as your project starting point.
 
-===Download here:===
+ ===Download here:===
   * [http://open-tides.googlecode.com/files/opentides-0.3.jar open-tides 0.3]
