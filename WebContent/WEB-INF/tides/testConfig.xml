@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">	
+	
+<!-- Property File Configuration -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+		 		<value>classpath:resources/tides.properties</value>
+		 		<value>classpath:resources/ideyatech.properties</value>
+		 	</list>
+		</property>		
+		<property name="ignoreUnresolvablePlaceholders" value="true"/>
+	</bean>	
+<!--  Define dataSource as DBCP -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost/javatest"/>
+		<property name="username" value="javauser"/>
+		<property name="password" value="javadude"/>
+	</bean>
+	
+	<bean id="reportDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost/javatest"/>
+		<property name="username" value="javauser"/>
+		<property name="password" value="javadude"/>
+	</bean>
+	    
+    <!-- Hibernate Utility Option using ideyatech.properties -->
+	<bean id="hibernateUtil" class="org.opentides.util.HibernateUtil">
+		<property name="driverClass" value="${database.driver}" />
+		<property name="url" value="${database.url}" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>	
+		
+	<bean id="evolveList" class="org.springframework.beans.factory.config.ListFactoryBean"> 
+        <property name="sourceList"> 
+            <list> 
+            </list> 
+        </property> 
+    </bean>  
+   
+<!-- List of user permissions -->
+	<bean id="rolesMap" class="org.springframework.beans.factory.config.MapFactoryBean">
+		<property name="sourceMap">	
+			<map>
+				<entry key="ROLE_ADMIN"><value>Administrator</value></entry>
+				<entry key="ROLE_GUEST"><value>Guest</value></entry>
+			</map>
+		</property>
+	</bean>
+
+<!-- Define ACEGI dataSource -->
+    <bean id="daoAuthenticationProvider" class="org.acegisecurity.providers.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService"><ref bean="memoryAuthenticationDao"/></property>
+      <!-- 
+      <property name="passwordEncoder"><ref local="passwordEncoder"/></property>
+       -->
+    </bean>	
+
+<!-- Bean for testing transaction -->
+	<bean id="serviceTransaction" class="org.opentides.service.impl.ServiceTransactionImpl">
+		<property name="dao"><ref bean="systemCodesDAO"/></property>
+	</bean>
+</beans>

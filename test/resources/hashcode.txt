@@ -1,0 +1,112 @@
+This is a test file for hashcode function.
+Please ignore codes below.
+
+
+/**
+ * @author allantan
+ * 
+ */
+@SuppressWarnings("unchecked")
+public class HighTides {
+
+	private static Logger _log = Logger.getLogger(HighTides.class);
+	private List<Class> annotationList;
+	private AnnotationDB db;
+	private static final String propFilename="resources/hightides.properties";
+	
+	private void initializeList() {
+		annotationList = new ArrayList<Class>();
+		annotationList.add(Service.class);
+		annotationList.add(Dao.class);
+		annotationList.add(Controller.class);
+		annotationList.add(Page.class);
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		HighTides ht = new HighTides();
+		if (args.length==1)
+			ht.generate(Language.valueOf(args[0]));
+		else
+			ht.generate(Language.OPENTIDES_JAR);
+	}
+
+	public HighTides() {
+		URL[] urls = ClasspathUrlFinder.findClassPaths();
+		try {
+			Properties props = new Properties();
+			props.load(getClass().getClassLoader().getResourceAsStream(propFilename));
+			Velocity.init(props);
+			initializeList();
+			PackageUtil.setBaseTemplatePath(props.getProperty("file.resource.loader.path"));
+			PackageUtil.setBaseOutputPath(props.getProperty("file.output.path"));
+			db = new AnnotationDB();
+			db.scanArchives(urls);
+		} catch (IOException e) {
+			_log.error("Initialization failed.", e);
+			throw new RuntimeException(e);
+		} catch (Exception e1) {
+			_log.error("Initialization failed.", e1);
+			throw new RuntimeException(e1);
+			
+		}
+	}
+
+	/**
+	 * This method checks all registered annotations and search for annotated classes.
+	 * Templates are then applied to the classes.
+	 * 
+	 */
+	public void generate(Language language) {
+		CodeFactory cf = CodeFactory.getFactory(language);
+		for (Class annotation : annotationList) {
+			_log.info("============================");
+			_log.info("Processing "+annotation.getName()+"...");
+			// retrieve the processor for this annotation
+			Processor p = cf.getProcessor(annotation);
+			// get all classes that are marked with this annotation
+			Set<String> serviceClasses = db.getAnnotationIndex().get(annotation.getName());
+			if (serviceClasses==null || serviceClasses.size()==0) {
+				_log.info("    No classes found.");
+				continue;
+			}
+			for (String className : serviceClasses) {
+				_log.info("    Found "+className);
+				try {
+					Map<String, Object> params = populateParams(annotation.getSimpleName(), className);
+					params.put("annotation", annotation.getName());
+					p.execute(params);
+				} catch (Exception e) {
+					_log.error("Failed to process class ["+className+"] for annotation ["+annotation+"]", e);
+				}
+			}
+		}
+	}
+
+	private Map<String, Object> populateParams(String annotation, String className) throws Exception {
+		Map<String, Object> params = new HashMap<String,Object>();
+		Class clazz = Class.forName(className);
+		
+		// add standard parameters
+		params.put("className", clazz.getSimpleName());
+		params.put("modelName", NamingUtil.toAttributeName(clazz.getSimpleName()));
+		params.put("formName", NamingUtil.toElementName(clazz.getSimpleName()));
+		params.put("prefix", NamingUtil.toElementName(clazz.getSimpleName()));
+		params.put("modelPackage",clazz.getPackage().getName());
+		params.put("fieldTemplatePath", CodeFactory.getFieldTemplatePath());
+		params.put("pageName", "/"+NamingUtil.toAttributeName(clazz.getSimpleName())+".jspx");
+		
+		// call helper to add additional parameters per annotation	
+		ClassParamReader paramReader = ParamReaderFactory.getReader(annotation);
+		if (paramReader != null) {
+			params.putAll(paramReader.getParamaters(clazz));
+		}
+		
+		params.put("titleField", BaseParamReader.getTitleField());
+		
+		return params;
+	}
+	
+}
