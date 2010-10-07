@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<!--Services -->
+	<bean id="logService" class="org.opentides.service.impl.LogServiceImpl">
+		<property name="dao" ref="auditLogDAO"/>
+	</bean>
+	
+	<bean id="systemCodesService" class="org.opentides.service.impl.SystemCodesServiceImpl" autowire="byName">
+		<property name="dao" ref="systemCodesDAO" />
+	</bean>
+
+	<bean id="widgetService" class="org.opentides.service.impl.WidgetServiceImpl">
+		<property name="dao" ref="widgetDAO"/>
+		<property name="widgetColumn" value="${widget.column}" />
+	</bean>
+
+	<bean id="userWidgetsService" class="org.opentides.service.impl.UserWidgetsServiceImpl" autowire="byName">
+		<property name="dao" ref="userWidgetsDAO"/>
+	</bean>
+
+	<bean id="fileInfoService" class="org.opentides.service.impl.FileInfoServiceImpl">
+		<property name="dao" ref="fileInfoDAO"/>
+	</bean>
+
+	<bean id="userService" class="org.opentides.service.impl.UserServiceImpl" autowire="byName">
+		<property name="dao" ref="coreUserDAO"/>
+		<property name="confirmURL" value="${confirm.password.reset.url}" />
+		<property name="roles">
+			<ref bean="rolesMap" />
+		</property>
+	</bean>
+	
+	<bean id="reportService" class="org.opentides.service.impl.ReportServiceImpl" autowire="byName">
+		<property name="dao" ref="reportDAO"/>
+		<property name="dataSource" ref="reportDataSource" />
+		<property name="jasperPath" value="${jasper.dir}" />
+	</bean>
+	
+	<bean id="resetPasswordMailMessage" class="org.opentides.bean.MailMessage">
+		<property name="msgFrom" value="${reset.password.from_email}"/>
+	</bean> 
+	
+	<bean id="userGroupService" class="org.opentides.service.impl.UserGroupServiceImpl" autowire="byName">
+		<property name="dao" ref="userGroupDAO"/>
+		<property name="roles">
+			<ref bean="rolesMap" />
+		</property>
+	</bean>		
+</beans>

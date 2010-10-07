@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="raffle" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="raffleId" class="java.lang.Long" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Long(3)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="branch" class="java.lang.String" isForPrompting="false">
+		<property name="prompt.type" value="dropdown"/>
+		<property name="value.one" value="1"/>
+		<property name="value.two" value="2"/>
+		<parameterDescription><![CDATA[Court of Appeal branch]]></parameterDescription>
+		<defaultValueExpression><![CDATA["Manila"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="imageStream" class="java.io.InputStream" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="reportDate" class="java.util.Date" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[select sc.value_ as category,
+doc.date_received as date_submitted,
+ci.case_title as title,
+doc.date_received as date_received,
+CONCAT(u.lastname, ', ', u.firstname) as ponente,
+sc2.value_ as reason
+from raffle_report rr,
+raffle_entry re,
+case_information ci,
+inbound_document doc,
+attachment a,
+user_profile u,
+system_codes sc,
+system_codes sc2
+where rr.id = $P{raffle_id}
+and rr.id = re.raffle_report_id
+and ci.id = re.case_information_id
+and ci.id = a.case_information_id
+and a.id = doc.id
+and re.selected_ponente = u.id
+and sc.id = ci.case_category
+and sc2.id = re.raffle_reason]]>
+	</queryString>
+	<field name="category" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="date_submitted" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="title" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="date_received" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ponente" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="reason" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="Category">
+		<groupExpression><![CDATA[$F{category}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="0" y="0" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{category}+"("+$V{Category_COUNT}+")"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="109" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-1" x="10" y="10" width="535" height="15"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Republic of the Philippines]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="10" y="25" width="535" height="24"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Court of Appeals]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="10" y="49" width="535" height="18"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{branch}]]></textFieldExpression>
+			</textField>
+			<image hyperlinkType="LocalPage">
+				<reportElement key="image-1" x="104" y="10" width="60" height="90"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{image_stream}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-6" x="369" y="84" width="48" height="20"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="417" y="84" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="14" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-6" x="0" y="0" width="123" height="14"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[DATE SUBMITTED FOR DECISION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" x="123" y="0" width="123" height="14"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[TITLE OF CASE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" x="246" y="0" width="73" height="14"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[DATE RECEIVED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" x="319" y="0" width="123" height="14"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[PONENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" x="442" y="0" width="113" height="14"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Reason]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="32" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="123" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{date_submitted}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="123" y="0" width="123" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="246" y="0" width="73" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{date_received}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="319" y="0" width="123" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ponente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="442" y="0" width="113" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{reason}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="100" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="20" width="555" height="80"/>
+				<subreportParameter name="raffle_id">
+					<subreportParameterExpression><![CDATA[$P{raffle_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "raffle-member.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement key="staticText-6" x="0" y="6" width="123" height="14"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Committee]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
