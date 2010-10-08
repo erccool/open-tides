@@ -1,0 +1,91 @@
+Testsuite: com.ideyatech.core.persistence.UserDAOTest
+Tests run: 8, Failures: 2, Errors: 0, Time elapsed: 3.557 sec
+------------- Standard Output ---------------
+2008-02-25 21:28:46,085 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testAddUser].>
+2008-02-25 21:28:46,140 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testAddUser].>
+2008-02-25 21:28:46,141 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testAddUser].>
+2008-02-25 21:28:46,141 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Began transaction (1): transaction manager [org.springframework.orm.jpa.JpaTransactionManager@435c4c]; rollback [true].>
+2008-02-25 21:28:46,339 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testAddUser].>
+2008-02-25 21:28:46,342 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Rolled back transaction after execution of test [testAddUser].>
+2008-02-25 21:28:46,346 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testRemoveRoles].>
+2008-02-25 21:28:46,363 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testRemoveRoles].>
+2008-02-25 21:28:46,363 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testRemoveRoles].>
+2008-02-25 21:28:46,363 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Began transaction (1): transaction manager [org.springframework.orm.jpa.JpaTransactionManager@435c4c]; rollback [true].>
+2008-02-25 21:28:46,402 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testRemoveRoles].>
+2008-02-25 21:28:46,403 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Rolled back transaction after execution of test [testRemoveRoles].>
+2008-02-25 21:28:46,407 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testRemoveUser].>
+2008-02-25 21:28:46,415 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testRemoveUser].>
+2008-02-25 21:28:46,415 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testRemoveUser].>
+2008-02-25 21:28:46,415 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Began transaction (1): transaction manager [org.springframework.orm.jpa.JpaTransactionManager@435c4c]; rollback [true].>
+2008-02-25 21:28:46,435 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testRemoveUser].>
+2008-02-25 21:28:46,436 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Rolled back transaction after execution of test [testRemoveUser].>
+2008-02-25 21:28:46,440 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testUniqueUsernameConstraints].>
+2008-02-25 21:28:46,446 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testUniqueUsernameConstraints].>
+2008-02-25 21:28:46,446 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testUniqueUsernameConstraints].>
+2008-02-25 21:28:46,446 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Began transaction (1): transaction manager [org.springframework.orm.jpa.JpaTransactionManager@435c4c]; rollback [true].>
+2008-02-25 21:28:46,449 WARN [org.hibernate.util.JDBCExceptionReporter] - <SQL Error: 1062, SQLState: 23000>
+2008-02-25 21:28:46,449 ERROR [org.hibernate.util.JDBCExceptionReporter] - <Duplicate entry 'test@abc.com' for key 2>
+2008-02-25 21:28:46,450 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testUniqueUsernameConstraints].>
+2008-02-25 21:28:46,451 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Rolled back transaction after execution of test [testUniqueUsernameConstraints].>
+2008-02-25 21:28:46,452 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testUniqueEmailConstraints].>
+2008-02-25 21:28:46,461 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testUniqueEmailConstraints].>
+2008-02-25 21:28:46,461 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testUniqueEmailConstraints].>
+2008-02-25 21:28:46,461 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Began transaction (1): transaction manager [org.springframework.orm.jpa.JpaTransactionManager@435c4c]; rollback [true].>
+2008-02-25 21:28:46,462 WARN [org.hibernate.util.JDBCExceptionReporter] - <SQL Error: 1062, SQLState: 23000>
+2008-02-25 21:28:46,462 ERROR [org.hibernate.util.JDBCExceptionReporter] - <Duplicate entry 'test1@abc.com' for key 2>
+2008-02-25 21:28:46,462 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testUniqueEmailConstraints].>
+2008-02-25 21:28:46,463 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Rolled back transaction after execution of test [testUniqueEmailConstraints].>
+2008-02-25 21:28:46,465 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testCountAll].>
+2008-02-25 21:28:46,472 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testCountAll].>
+2008-02-25 21:28:46,472 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testCountAll].>
+2008-02-25 21:28:46,472 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Began transaction (1): transaction manager [org.springframework.orm.jpa.JpaTransactionManager@435c4c]; rollback [true].>
+2008-02-25 21:28:46,618 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testCountAll].>
+2008-02-25 21:28:46,619 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Rolled back transaction after execution of test [testCountAll].>
+2008-02-25 21:28:46,620 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testIsRegistered].>
+2008-02-25 21:28:46,628 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testIsRegistered].>
+2008-02-25 21:28:46,628 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testIsRegistered].>
+2008-02-25 21:28:46,628 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Began transaction (1): transaction manager [org.springframework.orm.jpa.JpaTransactionManager@435c4c]; rollback [true].>
+2008-02-25 21:28:46,644 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testIsRegistered].>
+2008-02-25 21:28:46,644 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Rolled back transaction after execution of test [testIsRegistered].>
+2008-02-25 21:28:46,646 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testLoadByUsername].>
+2008-02-25 21:28:46,652 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testLoadByUsername].>
+2008-02-25 21:28:46,652 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testLoadByUsername].>
+2008-02-25 21:28:46,652 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Began transaction (1): transaction manager [org.springframework.orm.jpa.JpaTransactionManager@435c4c]; rollback [true].>
+2008-02-25 21:28:46,667 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testLoadByUsername].>
+2008-02-25 21:28:46,667 DEBUG [com.ideyatech.core.persistence.UserDAOTest] - <Rolled back transaction after execution of test [testLoadByUsername].>
+------------- ---------------- ---------------
+
+Testcase: testAddUser took 3.219 sec
+Testcase: testRemoveRoles took 0.06 sec
+	FAILED
+expected:<0> but was:<2>
+junit.framework.AssertionFailedError: expected:<0> but was:<2>
+	at com.ideyatech.core.persistence.UserDAOTest.testRemoveRoles(UserDAOTest.java:78)
+	at org.springframework.test.ConditionalTestCase.runBare(ConditionalTestCase.java:76)
+	at org.springframework.test.annotation.AbstractAnnotationAwareTransactionalTests.access$001(AbstractAnnotationAwareTransactionalTests.java:70)
+	at org.springframework.test.annotation.AbstractAnnotationAwareTransactionalTests$1.run(AbstractAnnotationAwareTransactionalTests.java:186)
+	at org.springframework.test.annotation.AbstractAnnotationAwareTransactionalTests.runTest(AbstractAnnotationAwareTransactionalTests.java:313)
+	at org.springframework.test.annotation.AbstractAnnotationAwareTransactionalTests.runTestTimed(AbstractAnnotationAwareTransactionalTests.java:281)
+	at org.springframework.test.annotation.AbstractAnnotationAwareTransactionalTests.runBare(AbstractAnnotationAwareTransactionalTests.java:182)
+	at org.springframework.test.jpa.AbstractJpaTests.runBare(AbstractJpaTests.java:174)
+	at org.springframework.test.jpa.AbstractJpaTests.runBare(AbstractJpaTests.java:255)
+
+Testcase: testRemoveUser took 0.032 sec
+	FAILED
+expected:<0> but was:<1>
+junit.framework.AssertionFailedError: expected:<0> but was:<1>
+	at com.ideyatech.core.persistence.UserDAOTest.testRemoveUser(UserDAOTest.java:86)
+	at org.springframework.test.ConditionalTestCase.runBare(ConditionalTestCase.java:76)
+	at org.springframework.test.annotation.AbstractAnnotationAwareTransactionalTests.access$001(AbstractAnnotationAwareTransactionalTests.java:70)
+	at org.springframework.test.annotation.AbstractAnnotationAwareTransactionalTests$1.run(AbstractAnnotationAwareTransactionalTests.java:186)
+	at org.springframework.test.annotation.AbstractAnnotationAwareTransactionalTests.runTest(AbstractAnnotationAwareTransactionalTests.java:313)
+	at org.springframework.test.annotation.AbstractAnnotationAwareTransactionalTests.runTestTimed(AbstractAnnotationAwareTransactionalTests.java:281)
+	at org.springframework.test.annotation.AbstractAnnotationAwareTransactionalTests.runBare(AbstractAnnotationAwareTransactionalTests.java:182)
+	at org.springframework.test.jpa.AbstractJpaTests.runBare(AbstractJpaTests.java:174)
+	at org.springframework.test.jpa.AbstractJpaTests.runBare(AbstractJpaTests.java:255)
+
+Testcase: testUniqueUsernameConstraints took 0.012 sec
+Testcase: testUniqueEmailConstraints took 0.012 sec
+Testcase: testCountAll took 0.156 sec
+Testcase: testIsRegistered took 0.025 sec
+Testcase: testLoadByUsername took 0.022 sec

@@ -1,0 +1,26 @@
+Testsuite: com.ideyatech.core.persistence.BaseEntityDAOTest
+Tests run: 3, Failures: 0, Errors: 0, Time elapsed: 3.485 sec
+------------- Standard Output ---------------
+2008-02-25 21:28:42,214 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testGetJpqlQuery].>
+2008-02-25 21:28:42,269 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testGetJpqlQuery].>
+2008-02-25 21:28:42,270 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testGetJpqlQuery].>
+2008-02-25 21:28:42,270 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <Began transaction (1): transaction manager [org.springframework.orm.jpa.JpaTransactionManager@fc82a6]; rollback [true].>
+2008-02-25 21:28:42,282 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testGetJpqlQuery].>
+2008-02-25 21:28:42,286 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <Rolled back transaction after execution of test [testGetJpqlQuery].>
+2008-02-25 21:28:42,294 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <Method-level @Rollback(true) overrides default rollback [true] for test [testSaveNewEntityModel].>
+2008-02-25 21:28:42,314 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <Method-level @Rollback(true) overrides default rollback [true] for test [testSaveNewEntityModel].>
+2008-02-25 21:28:42,314 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <Method-level @Rollback(true) overrides default rollback [true] for test [testSaveNewEntityModel].>
+2008-02-25 21:28:42,314 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <Began transaction (1): transaction manager [org.springframework.orm.jpa.JpaTransactionManager@fc82a6]; rollback [true].>
+2008-02-25 21:28:42,464 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <Method-level @Rollback(true) overrides default rollback [true] for test [testSaveNewEntityModel].>
+2008-02-25 21:28:42,465 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <Rolled back transaction after execution of test [testSaveNewEntityModel].>
+2008-02-25 21:28:42,467 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testCountAll].>
+2008-02-25 21:28:42,476 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testCountAll].>
+2008-02-25 21:28:42,476 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testCountAll].>
+2008-02-25 21:28:42,476 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <Began transaction (1): transaction manager [org.springframework.orm.jpa.JpaTransactionManager@fc82a6]; rollback [true].>
+2008-02-25 21:28:42,634 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <No method-level @Rollback override: using default rollback [true] for test [testCountAll].>
+2008-02-25 21:28:42,635 DEBUG [com.ideyatech.core.persistence.BaseEntityDAOTest] - <Rolled back transaction after execution of test [testCountAll].>
+------------- ---------------- ---------------
+
+Testcase: testGetJpqlQuery took 3.132 sec
+Testcase: testSaveNewEntityModel took 0.173 sec
+Testcase: testCountAll took 0.169 sec
