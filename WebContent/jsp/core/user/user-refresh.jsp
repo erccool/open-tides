@@ -3,26 +3,21 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="ot" uri="http://www.ideyatech.com/tides"%>
-
 <c:if test="${newRow}">
-<tr id="user-row-${user.id}" status="new">
+<div id="row-${user.id}" status="new">
 </c:if>
-	<td><c:out value="${user.firstName}" /></td>
-	<td><c:out value="${user.lastName}" /></td>
-	<td><c:out value="${user.emailAddress}" /></td>
-	<td>
-		<c:forEach items="${user.groups}" var="group">
-		<c:out value="${group.name}" /> 
-		</c:forEach>
-	</td>
-	<td>
-		<ot:update_button id="${user.id}" page="admin/people.jspx" prefix="user"/>
-		<ot:delete_button id="${user.id}" page="admin/people.jspx" title="${user.emailAddress}" prefix="user"/>                  		
-	</td>	
+  <span class="user-fname"><c:out value="${user.firstName}"/></span>
+  <span class="user-lname"><c:out value="${user.lastName}"/></span>  
+  <span class="user-email"><c:out value="${user.emailAddress}"/></span>  
+  <span class="user-role">
+     <c:forEach items="${user.groups}" var="group">
+     	<c:out value="${group.name}" /> 
+     </c:forEach>
+  </span>
+  <span class="user-action">
+  	<ot:update_button id="${user.id}" page="admin/people.jspx"/>
+  	<ot:delete_button id="${user.id}" page="admin/people.jspx" title="${user.emailAddress}"/>
+  </span> 
 <c:if test="${newRow}">
-</tr>
-<script language="javascript">
-IDEYATECH.crud.cancelNew('user-');
-IDEYATECH.crud.refreshTable('user-table-results', {})
-</script>
+</div>
 </c:if>

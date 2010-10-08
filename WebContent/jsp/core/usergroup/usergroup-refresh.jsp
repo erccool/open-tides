@@ -4,24 +4,19 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="ot" uri="http://www.ideyatech.com/tides"%>
 <c:if test="${newRow}">
-<tr id="usergroup-row-${usergroup.id}" status="new">
+<div id="row-${userGroup.id}" status="new">
 </c:if>
-	<td><c:out value="${usergroup.name}" /></td>
-	<td><c:out value="${usergroup.description}" /></td>
-	<td>
-		<c:forEach items="${usergroup.roleNames}" var="role" varStatus="status">
-		<c:if test="${status.index > 0}"> | </c:if>
-		<c:out value="${role}" />
-		</c:forEach>
-	</td>
-	<td>
-		<ot:update_button id="${usergroup.id}" page="admin/usergroup.jspx" prefix="usergroup"/>
-		<ot:delete_button id="${usergroup.id}" page="admin/usergroup.jspx" title="${usergroup.name}" prefix="usergroup"/>                  		
-	</td>	
+  <span class="usergroup-name"><c:out value="${userGroup.name}"/></span>
+  <span class="usergroup-description"><c:out value="${userGroup.description}"/></span> 
+  <span class="usergroup-role">
+	<c:forEach items="${userGroup.roleNames}" var="role">
+  		<c:out value="${role}"/> &nbsp;-
+  	</c:forEach> 
+  </span>
+  <span class="usergroup-action">
+  	<ot:update_button id="${userGroup.id}" page="admin/usergroup.jspx"/>
+  	<ot:delete_button id="${userGroup.id}" page="admin/usergroup.jspx" title="${userGroup.name}"/>
+  </span> 
 <c:if test="${newRow}">
-</tr>
-<script language="javascript">
-IDEYATECH.crud.cancelNew('usergroup-');
-IDEYATECH.crud.refreshTable('usergroup-table-results', {})
-</script>
+</div>
 </c:if>

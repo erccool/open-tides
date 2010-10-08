@@ -4,63 +4,69 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="ot" uri="http://www.ideyatech.com/tides"%>
 <%@ taglib prefix="idy" tagdir="/WEB-INF/tags"%>
-
-<idy:header title_webpage="label.usergroups">
+<idy:header title_webpage="label.users">
   <script src="${url_yui}/yahoo-dom-event/yahoo-dom-event.js"></script>
   <script src="${url_yui}/animation/animation-min.js"></script>
   <script src="${url_yui}/connection/connection-min.js"></script>
-  <script src="${url_context}/script/ideyatech-${ot_version}/crud.js"></script>
+  <script src="${url_context}/script/ideyatech-0.1/crud.js"></script>
+  
 </idy:header>
-    <!-- BODY -->
-    <div id="bd">
-        <div class="yui-g">
-        <div class="main">
+<!-- BODY -->
 
-            <div class="title-wrapper">
-            	<div class="title"><span><spring:message code="label.usergroups" /></span></div>
-            </div> 
-            
-            <div class="contents">
-            	<p><a href="usergroup-matrix.jspx"> View Permission Matrix </a> </p>
-            	<table class="admin-table">
-            		<thead>
-            		<tr>
-            			<th><spring:message code="label.name" /></th>
-            			<th><spring:message code="label.description" /></th>
-            			<th><spring:message code="label.role" /></th>
-            			<th></th>
-            		</tr>
-            		</thead>
-            		<tbody id="usergroup-table-results">
-            		<c:forEach items="${results.results}" var="record" varStatus="status">
-            		<tr id="usergroup-row-${record.id}" class="row-style-${status.count%2}">
-            			<td><c:out value="${record.name}" /></td>
-            			<td><c:out value="${record.description}" /></td>
-            			<td>
-            			<c:forEach items="${record.roleNames}" var="role" varStatus="status">
-            				<c:if test="${status.index > 0}"> | </c:if>
-                      		<c:out value="${role}" />
-                    	</c:forEach>
-                  		</td>
-                  		<td>
-							<ot:update_button id="${record.id}" page="admin/usergroup.jspx" prefix="usergroup"/>
-                    		<ot:delete_button id="${record.id}" page="admin/usergroup.jspx" title="${record.name}" prefix="usergroup"/>                  		
-                  		</td>	
-            		</tr>
-            		</c:forEach>
-            		</tbody>
-            		<tr id="usergroup-row-new">
-            			<td colspan="4">  	
-            			</td>
-            		</tr>
-            	</table>
-            	<ot:add_button page="admin/usergroup.jspx" prefix="usergroup"/>
-            	<ot:paging results="${results}" baseURL="/admin/usergroup.jspx" pageParamName="page" displaySummary="false" displayPageLinks="true" />	            	
-        	</div>
+<div id="doc2" class="yui-t7">
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-gf top">
+        <!-- LEFT - HOTEL_SEARCH -->
+        <div class="graybig yui-u first">
+          <idy:box-section position="top" />
+          <div class="boxmiddle">
+          	<idy:admin-navigation active="usergroup" />
+          </div>
+          <idy:box-section position="bottom" />
         </div>
-        </div>    
+        <!-- END LEFT - HOTEL_SEARCH -->
+        <!-- RIGHT - BOOKING_SEARCH-->
+        <div class="graybig yui-u">
+          <idy:box-section position="top" />
+          <div class="boxmiddle">
+            <h1>
+              <spring:message code="label.usergroups" />
+            </h1>
+            <div id="table-header">
+              <span class="usergroup-name"><spring:message code="label.name"/></span>
+			  <span class="usergroup-description"><spring:message code="label.description"/></span>
+              <span class="usergroup-role"><spring:message code="label.role" /></span> 
+              <span class="usergroup-action"></span>
+            </div>
+            <div id="table-results">
+              <c:forEach items="${results.results}" var="record" varStatus="status">
+                <div id="row-${record.id}" class="row-style-${status.count%2}">
+                  <span class="usergroup-name"><c:out value="${record.name}" /></span>
+			      <span class="usergroup-description"><c:out value="${record.description}" /></span>
+                  <span class="usergroup-role">
+                    <c:forEach items="${record.roleNames}" var="role">
+                      <c:out value="${role}" /> | 
+                    </c:forEach>
+                  </span> 
+                  <span class="usergroup-action">
+                    <ot:update_button id="${record.id}" page="admin/usergroup.jspx" />
+                    <ot:delete_button id="${record.id}" page="admin/usergroup.jspx" title="${record.name}" />
+                  </span>
+                </div>
+              </c:forEach>
+            </div>
+            <div id="row-new"></div>
+            <div id="add-new" class="button">
+              <ot:add_button
+	page="admin/usergroup.jspx" />
+            </div>
+          </div>
+          <idy:box-section position="bottom" />
+        </div>
+        <!-- END RIGHT - BOOKING_SEARCH-->
+      </div>
     </div>
-    <!-- END OF BODY -->
-    
-<!-- FOOT -->
+  </div>
+</div>
 <idy:footer />

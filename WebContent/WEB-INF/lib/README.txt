@@ -16,7 +16,6 @@ COMMON:
 jta.jar - for java transactions
 log4j-1.2.15.jar - for logging
 c3p0-0.9.1.2.jar - for db connection and statement pooling
-common-upload.jar - for file upload
 
 HIBERNATE/JPA:
 antlr-2.7.6.jar - required by Hibernate core.
@@ -42,10 +41,7 @@ VELOCITY/MAIL:
 velocity-1.5.jar - main velocity jar file
 activation.jar - jaf required by velocity
 mail.jar - javamail 1.4.1
-commons-lang-2.4 - required by velocity
-
-JASPER REPORTS:
-jasperreports-3.7.0.jar - required by Jasper Reports
+commons-lang-2.1 - required by velocity
 
 AJAX:
 json_simple.jar - For generating JSON response

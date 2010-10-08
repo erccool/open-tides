@@ -22,7 +22,7 @@ var yDom = YAHOO.util.Dom;
  * Provides common utility functions.
  * @class util
  * @namespace IDEYATECH
- */ 
+ */
  
  IDEYATECH.util = function () {
   

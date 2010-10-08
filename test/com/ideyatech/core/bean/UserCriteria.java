@@ -3,8 +3,7 @@ package com.ideyatech.core.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.opentides.bean.user.BaseUser;
-
+import com.ideyatech.core.bean.user.BaseUser;
 
 /**
  * This is a test class used to check if CrudUtil.retrieveObjectValue
@@ -28,4 +27,5 @@ public class UserCriteria extends BaseUser {
 		props.add("credential.id");
 		return props;
 	}
+
 }

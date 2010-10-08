@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <project name="open-tides" basedir="." default="usage">	
 	<property name="src.dir" value="src" />
-	<property name="resources" value="resources" />
-	<property name="resources.dir" value="src/${resources}" />
+	<property name="resources.dir" value="src/resources" />
 	<property name="web.dir" value="WebContent" />		
 	<property name="test.dir" value="test" />
 	<property name="lib.dir" value="WebContent/WEB-INF/lib" />	
@@ -56,7 +55,6 @@
 				<include name="**/*.tld" />
 				<include name="**/*.properties" />
 				<include name="**/*.xml" />
-				<include name="**/*.vm" />
 			</fileset>
 		</copy>
 		<copy todir="${build.dir}/resources" preservelastmodified="true">
@@ -76,44 +74,29 @@
 				<include name="**/*.tag" />
 				<include name="**/*.tld" />
 				<include name="**/*.cfg.xml" />
-				<include name="**/*.vm" />
 				<exclude name="**/*Test.class" />
-				<exclude name="**/hightides.properties" />
 			</fileset>
 		</jar>
 	</target>
 
-	<target name="tide-lex" depends="build-jar" description="Synchronize the library to CMIS">
-		<property name="target.web.dir" value="../../lex_sts/legal-search/${web.dir}" />
-		<property name="target.src.dir" value="../../lex_sts/legal-search/${src.dir}" />
-		<copy todir="${target.web.dir}" preservelastmodified="true">
-			<fileset dir="${web.dir}">
-				<include name="**/*.*" />
-			</fileset>
-		</copy>
-		<copy todir="${target.web.dir}/WEB-INF/lib" preservelastmodified="true" file="${dist.dir}/opentides.jar" />	
-		<copy todir="${target.web.dir}/WEB-INF/classes/${resources}" preservelastmodified="true">
-			<fileset dir="${resources.dir}">
-				<include name="themes/*.properties" />
-			</fileset>
-		</copy>
-	</target>
-	
 	<target name="tide" depends="build-jar" description="Synchronize the library to an eclipse project">
 		<input message="Please enter Eclipse project to tide :" addproperty="deploy.dir"/>
 		<property name="target.web.dir" value="../${deploy.dir}/${web.dir}" />
 		<property name="target.src.dir" value="../${deploy.dir}/${src.dir}" />
+		<!--
+		<copy todir="${target.src.dir}" preservelastmodified="true">
+			<fileset dir="${src.dir}">
+				<include name="**/*.properties" />
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+		-->
 		<copy todir="${target.web.dir}" preservelastmodified="true">
 			<fileset dir="${web.dir}">
 				<include name="**/*.*" />
 			</fileset>
 		</copy>
 		<copy todir="${target.web.dir}/WEB-INF/lib" preservelastmodified="true" file="${dist.dir}/opentides.jar" />	
-		<copy todir="${target.web.dir}/WEB-INF/classes/${resources}" preservelastmodified="true">
-			<fileset dir="${resources.dir}">
-				<include name="themes/*.properties" />
-			</fileset>
-		</copy>
 	</target>
 
 	<target name="build-test" description="Compile main source all JUnit test files">

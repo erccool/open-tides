@@ -4,21 +4,13 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="idy" uri="http://www.ideyatech.com/tides"%>
 
-<td colspan="4">
-<form:form commandName="usergroup" id="usergroup-form-${usergroup.id}" action="" cssClass="user">
-	<idy:form_title isNew="${usergroup.isNew}" formName="usergroup"/>
+<div class="form">
+<form:form commandName="userGroup" action="">
+	<idy:form_title isNew="${userGroup.isNew}" label="label.usergroup"/>
 	<div class="content">	
-		<spring:bind path="usergroup.*">
-		<c:if test="${status.error}">
-			<!-- this is a hack to crud.js to handle validation messages. -->
-			<c:if test="${usergroup.isNew}">
-			<!-- <tr id="usergroup-row-new"> -->
-			</c:if>			
-			<div class='errorBox'>
-				<form:errors path="*" />
-            </div>
-		</c:if>
-		</spring:bind>
+    	<div class="errorBox">
+    		<form:errors path="*"/>
+    	</div>
     	<p> <label for="name"><spring:message code="label.name" /></label>
 			<form:input path="name" size="40" maxlength="100" /> </p>
 		<p> <label for="description"><spring:message code="label.description" /></label>
@@ -30,9 +22,9 @@
 		</c:forEach>
 		</p>
 		<div class="button">
-		  	<idy:submit_button id="${usergroup.id}" page="admin/usergroup.jspx" formName="usergroup-form-${usergroup.id}" prefix="usergroup"/>
-  			<idy:cancel_button id="${usergroup.id}" page="admin/usergroup.jspx" prefix="usergroup"/>
+		  	<idy:submit_button id="${userGroup.id}" page="admin/usergroup.jspx" formName="userGroup"/>
+  			<idy:cancel_button id="${userGroup.id}" page="admin/usergroup.jspx"/>
 		</div>
 	</div>
 </form:form>
-</td>
+</div>

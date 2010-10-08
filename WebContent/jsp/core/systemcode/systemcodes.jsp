@@ -4,94 +4,80 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="ot" uri="http://www.ideyatech.com/tides"%>
 <%@ taglib prefix="idy" tagdir="/WEB-INF/tags"%>
-<idy:header title_webpage="label.system-look-up-code" active="systemcodes">
+<idy:header title_webpage="label.system-look-up-code">
   <script src="${url_yui}/yahoo-dom-event/yahoo-dom-event.js"></script>
   <script src="${url_yui}/animation/animation-min.js"></script>
   <script src="${url_yui}/connection/connection-min.js"></script>
-  <script src="${url_context}/script/ideyatech-${ot_version}/crud.js"></script>
-  
-  <script type="text/javascript">
-  	function checkNewCategory(fromDropdown) {
- 		var dropDownHTML  ='<label for="category"><spring:message code="label.category" /></label><select name="category" onclick="javascript:checkNewCategory(true);"><option value="0">Select a Category</option><option value="0">-- New Category --</option><c:forEach items="${categories}" var="record" varStatus="status"><option>${record.category}</option></c:forEach></select>';
- 		var textFieldHTML ='<label for="category"><spring:message code="label.category" /></label><input type="text" name="category" id="categoryText"/> <a href="javascript:void(0)" onclick="javascript:checkNewCategory(false)">Cancel</a>';
- 		var ni = yDom.get('categorySelector');
-  		if (fromDropdown) {
-  			// check if "New Category" is selected
-  			var select = yDom.get('categorySelect');
-	  		if (select.selectedIndex==1)
-	  			ni.innerHTML = textFieldHTML;
-  		} else
-  			ni.innerHTML = dropDownHTML;
-	}
-  </script>
+  <script src="${url_context}/script/ideyatech-0.1/crud.js"></script>
 </idy:header>
+<!-- BODY -->
 
-    <!-- BODY -->
-    <div id="bd">
-        <div class="yui-g">
-        <div class="main" id="systemcodes">
-
-            <div class="title-wrapper">
-            	<div class="title" id="systemcodes-title"><span><spring:message code="label.system-look-up-code" /></span></div>
-            </div> 
-            
-            <div class="contents">
-	            <div id="search-criteria">
-					<form:form commandName="systemCode" id="systemCodeSearch" action="${url_context}/admin/lookup.jspx">
-						<p>
-						<label for="category"><spring:message code="label.category" /></label>
-						<form:select path="category">
-							<form:option value="">Select a Category</form:option>
-							<form:options items="${categories}" itemValue="category" itemLabel="category" />
-						</form:select>
-						</p>
-						<p>
-						<label for="key"><spring:message code="label.key" /></label>
-						<form:input path="key" maxlength="20" />
-						</p>
-						<p>
-						<label for="value"><spring:message code="label.value" /></label>
-						<form:input path="value" maxlength="50" />		
-						</p>
-						<ot:sort_input searchFormId="systemCodeSearch"/>
-						<input type="submit" name="Submit_" value="<spring:message code="label.submit" />" />
-					</form:form>
-				</div>
-				<hr class="broad"/>
-            	<table class="admin-table">
-            		<thead id="lookup-table-results">
-            		<tr>
-            			<th><ot:header_sort headerField="category" headerLabel="label.category" prefix="${systemCode}" searchFormId="systemCodeSearch"/></th>
-            			<th><ot:header_sort headerField="key" headerLabel="label.key" prefix="${systemCode}" searchFormId="systemCodeSearch"/></th>
-            			<th><ot:header_sort headerField="value" headerLabel="label.value" prefix="${systemCode}" searchFormId="systemCodeSearch"/></th>
-            			<th></th>
-            		</tr>
-            		</thead>
-            		<tbody id="lookup-table-results">
-            		<c:forEach items="${results.results}" var="record" varStatus="status">
-            		<tr id="lookup-row-${record.id}" class="row-style-${status.count%2}">
-            			<td><c:out value="${record.category}" /></td>
-            			<td><c:out value="${record.key}" /></td>
-            			<td><c:out value="${record.value}" /></td>
-                  		<td>
-							<ot:update_button id="${record.id}" page="admin/lookup.jspx" prefix="lookup"/>
-                    		<ot:delete_button id="${record.id}" page="admin/lookup.jspx" title="${record.key}" prefix="lookup"/>                  		
-                  		</td>	
-            		</tr>
-            		</c:forEach>
-            		</tbody>
-            		<tr id="lookup-row-new">
-            			<td colspan="4">  	
-            			</td>
-            		</tr>
-            		
-            	</table>
-            	<ot:add_button page="admin/lookup.jspx" prefix="lookup"/>
-            	<ot:paging results="${results}" baseURL="/admin/lookup.jspx" pageParamName="page" displaySummary="false" displayPageLinks="true" />	            	
-        	</div>
+<div id="doc2" class="yui-t7">
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-gf top">
+        <!-- LEFT - -->
+        <div class="graybig yui-u first">
+          <idy:box-section position="top" />
+          <div class="boxmiddle">
+          	<idy:admin-navigation active="systemcodes" />
+          </div>
+          <idy:box-section position="bottom" />
         </div>
-        </div>    
+        <!-- END LEFT  -->
+        <!-- RIGHT -->
+        <div class="graybig yui-u">
+          <idy:box-section position="top" />
+          <div class="boxmiddle">
+			 <h1><spring:message code="label.system-look-up-code"/></h1>
+			<div id="search-criteria">
+				<form:form commandName="systemCode" id="systemCodeSearch" action="">
+				<label for="category"><spring:message code="label.category" /></label>
+				<form:select path="category">
+					<form:option value="0">Select</form:option>
+					<form:options items="${categories}" itemValue="name" itemLabel="name" />
+				</form:select>
+				<label for="key"><spring:message code="label.key" /></label>
+				<form:input path="key" maxlength="20" />
+				<label for="value"><spring:message code="label.value" /></label>
+				<form:input path="value" maxlength="50" />		
+				<input type="submit" name="Submit_" value="<spring:message code="label.submit" />" />
+				</form:form>
+			</div>
+			<hr/>
+			<ot:paging results="${results}" 
+					 baseURL="lookup.jspx"
+					 pageParamName="page"
+					 displaySummary="false" displayPageLinks="true"/>
+			<div id="table-header">
+			  <span class="systemcode-category"><spring:message code="label.category"/></span>
+			  <span class="systemcode-key"><spring:message code="label.key"/></span>
+			  <span class="systemcode-value"><spring:message code="label.value"/></span>
+			  <span class="action"></span>
+			</div>
+			<div id="table-results">
+			<c:forEach items="${results.results}" var="record" varStatus="status">
+			<div id="row-${record.id}" class="row-style-${status.count%2}">
+			  <span class="systemcode-category"><c:out value="${record.category}"/></span>
+			  <span class="systemcode-key"><c:out value="${record.key}"/></span>
+			  <span class="systemcode-value"><c:out value="${record.value}"/></span>
+			  <span class="action">
+			  	<ot:update_button id="${record.id}" page="admin/lookup.jspx"/>
+			  	<ot:delete_button id="${record.id}" page="admin/lookup.jspx" title="${record.key}"/>
+			  </span> 
+			</div>
+			</c:forEach>
+			</div>
+			<div id="row-new"></div>
+			<div id="add-new" class="button">
+				<ot:add_button page="admin/lookup.jspx"/>
+			</div>          
+          </div>
+          <idy:box-section position="bottom" />
+        </div>
+<!-- END RIGHT -->
+      </div>
     </div>
-    <!-- END OF BODY -->
-<!-- FOOT -->
+  </div>
+</div>
 <idy:footer />

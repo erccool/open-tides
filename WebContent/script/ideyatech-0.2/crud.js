@@ -54,15 +54,14 @@ var Try = {
 	  var replaceDiv = yDom.get(o.argument[0]);
 	  var userCallback = o.argument[1];
 	  replaceDiv.innerHTML = o.responseText;
+	  if (o.argument[2]==true) __evaluate(o);
 	  if ( !IDEYATECH.util.isEmpty(userCallback) ) {
 		try {
 		  userCallback.call();
 		} catch (err) {
 		}
 	  }
-	  if (o.argument[2]) 
-		  __evaluateJS(o);
-	}; 
+	};
 	
    /**
      * Private helper to append the response as sibling of the div 
@@ -71,19 +70,18 @@ var Try = {
      * o.argument[2] {boolean} should javascript be executed
      */	
 	var __append = function(o) {
- 	  var rootId = __getFirstElementId(o.responseText,"tr");
+ 	  var rootId = __getFirstElementId(o.responseText);
  	  if (!IDEYATECH.util.isEmpty(rootId) && yDom.get(rootId)==null) {	
   	  	var parent = yDom.get(o.argument[0]);
 	  	var userCallback = o.argument[1];
 	  	parent.innerHTML = parent.innerHTML + o.responseText;	  
+	  	if (o.argument[2]==true) __evaluate(o)
 	  	if ( !IDEYATECH.util.isEmpty(userCallback) ) {
 		  try {
 			userCallback.call();
 		  } catch (err) {
 		  }
 	  	}
-	  	if (o.argument[2]) 
-	  		__evaluateJS(o);
 	  } else {
 	    if (!IDEYATECH.util.isEmpty(rootId)) o.argument[0]=rootId;
 	    __replace(o);
@@ -93,8 +91,8 @@ var Try = {
 	/**
 	 * Private helper to retrieve the first element id in the string
 	 */
-    var __getFirstElementId = function(str,tag) {
-      var matchExp = new RegExp('<'+tag+'[^>]+id="(.\*?)"[^>]*>', 'img');
+    var __getFirstElementId = function(str) {
+      var matchExp = new RegExp('<div[^>]+id="(.\*?)"[^>]*>', 'img');
       var matches = matchExp.exec(str)||[];
       return matches[1];
     }
@@ -102,17 +100,9 @@ var Try = {
 	/**
 	 * Private helper that will evaluate the ajax response
 	 */
-	var __evaluateJS = function(o) {
+	var __evaluate = function(o) {
 		var script = IDEYATECH.util.extractScripts(o.responseText);
 		eval(script||'');
-	}
-	
-	/**
-	 * Private helper that will evaluate the ajax response
-	 */
-	var _evaluate = function(o) {
-		var evalElement = yDom.get(o.argument[1]);
-		eval(o.responseText||'');
 	}
 	
 	var __failure = function(o){
@@ -169,30 +159,6 @@ var Try = {
 		  if (argument['append']) callback['success']=__append;
 		  yConnect.asyncRequest('GET', url, callback); 	    
 	    },
-	    /**
-	     * Submits a form and execute the javascript from the Ajax response
-	     * @method loadPageWithEval
-	     * @param {String} url URL where request will be sent
-	     * @param {String} evalid the element containing script for eval.
-	     */
-	    submitFormWithEval: function(formName, evalid, url, postdata) {
-		  var formObject = yDom.get(formName);
-		  yConnect.setForm(formObject); 
-		  var args = ['table-results',evalid];
-		  if (url==null || url.length == 0)
-			  url = formObject.action;
-		  var callback =
-		  {
-		    success:_evaluate,
-		    failure:__failure,
-		    argument:args
-		  };
-		  if (postdata==null || postdata.length <=0) {
-		    yConnect.asyncRequest('POST', url, callback); 				  
-		  } else {
-		    yConnect.asyncRequest('POST', url, callback, postdata); 		
-		  }	
-	    },
 	   /**
 	     * Submits the form for processing.
 	     * @method submitForm
@@ -202,7 +168,6 @@ var Try = {
 	     *     - callback = method to execute after loading     
 	     *     - append   = true, will append result instead of replace
 	     *     - postdata = parameter to append in the form submission
-	     *     - formName = name of the form to be submitted
 	     */  
 		submitForm: function(url, argument) {
 		  var formObject = yDom.get( argument['formName'] );
@@ -220,7 +185,7 @@ var Try = {
 		    success:__replace,
 		    failure:__failure,
 		    argument:args,
-		    upload : __replace // upload is called when using asyncronous uploading so this needs to be called
+		    upload : __append // upload is called when using asyncronous uploading so this needs to be called
 		  };
 		  if (argument['append']) callback['success']=__append;
 		  
@@ -257,10 +222,9 @@ var Try = {
 	 * called by __fade_element
 	 */
 	var __remove = function() {
-	   var el = this.getEl();
-   	   var parent = el.parentNode;
-   	   parent.removeChild(el);
-	   setTimeout("IDEYATECH.crud.refreshTable('"+parent.id+"')"); 
+   	   var el = this.getEl(); 
+	   el.parentNode.removeChild(el);
+	   IDEYATECH.crud.refreshTable('table-results'); 
 	}
 
 	var __failure = function(o) {
@@ -280,17 +244,15 @@ var Try = {
 	     *                     Appends -1 or -0 on prefix for alternating styles.
 		 */
 		refreshTable: function(divId, argument) {
-			var table = yDom.get(divId);
-			var prefix = 'row-style-';
-			try {
-				prefix = argument['stylePrefix'];
-			} catch (err) {};
+			var table = yDom.get(divid);
+			var prefix = argument['stylePrefix'];
+			if (IDEYATECH.util.isEmpty(prefix)) prefix='row-style';
 
-			var children = table.getElementsByTagName('tr');
+			var children = table.getElementsByTagName('div');
 			for (var i=0;i<children.length;i++) {
-				yDom.removeClass(children[i], prefix+'1');
-				yDom.removeClass(children[i], prefix+'0');
-				yDom.addClass(children[i], prefix+((i+1)%2));
+				yDom.removeClass(children[i], prefix+'-1');
+				yDom.removeClass(children[i], prefix+'-0');
+				yDom.addClass(children[i], prefix+i%2);
 			}
 		},
 	    /**
@@ -472,8 +434,8 @@ IDEYATECH.anim = function() {
 		if (loadingDiv) yDom.setStyle('loadingDiv','display','none');
 		var msg = response.responseText;
 		if ("error:" == msg.substr(0, 6)) {    
-	        var fp = "<div class='errorBox'>Login Failed. Please try again. <br/>" 
-	                +"Reason: "+msg.substring(6, msg.length) + "</div>";
+	        var fp = "<span class='errorBox'>Login Failed. Please try again. <br/>" 
+	                +"Reason: "+msg.substring(6, msg.length) + "</span>";
 	        yDom.get('loginMessage').innerHTML = fp;
 	    } else if ("url:" == msg.substr(0, 4)) {    
 	        location.href = msg.substring(4, msg.length);    
