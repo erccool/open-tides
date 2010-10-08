@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<!-- Proxy Template-->
+	
+<!--  Here is a sample configuration of web service template. Apply to your applicationContext-wsc.xml.
+ 
+	<bean id="fileTemplate" class="com.ideyatech.core.proxy.impl.StubFileTemplate">
+		<property name="fileMap">
+			<map>
+				<entry key="/sampler/request.jsp" value="testdata/ws/sample.xml" />
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="webServiceTemplate" class="com.ideyatech.core.proxy.impl.WebServiceTemplate">
+		<property name="timeout" value="15000"/>
+	</bean> 
+	
+	<bean id="baseProxy"  class="com.ideyatech.core.proxy.impl.BaseWSProxy" abstract="true">
+		<property name="proxyTemplate" ref="webServiceTemplate"/>
+	</bean>
+ -->
+ 
+</beans>
