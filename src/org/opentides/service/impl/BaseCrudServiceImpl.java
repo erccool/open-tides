@@ -1,26 +1,15 @@
-/*
-   Licensed to the Apache Software Foundation (ASF) under one
-   or more contributor license agreements.  See the NOTICE file
-   distributed with this work for additional information
-   regarding copyright ownership.  The ASF licenses this file
-   to you under the Apache License, Version 2.0 (the
-   "License"); you may not use this file except in compliance
-   with the License.  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an
-   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   KIND, either express or implied.  See the License for the
-   specific language governing permissions and limitations
-   under the License.    
+/**
+ * 
+ * This source code is property of Ideyatech, Inc.
+ * All rights reserved. 
+ * 
+ * BaseCrudServiceImpl.java
+ * Created on Jan 31, 2008, 10:46:14 PM
  */
 package org.opentides.service.impl;
 
 import java.util.List;
 
-import org.opentides.InvalidImplementationException;
 import org.opentides.bean.BaseEntity;
 import org.opentides.persistence.BaseEntityDAO;
 import org.opentides.service.BaseCrudService;
@@ -28,11 +17,13 @@ import org.opentides.util.StringUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.opentides.InvalidImplementationException;
+
 /**
  * This is a base implementation that supports CRUD operations.
- *
+ * 
  * @author allanctan
- *
+ * 
  */
 @Transactional
 public class BaseCrudServiceImpl<T extends BaseEntity> extends
@@ -42,11 +33,11 @@ public class BaseCrudServiceImpl<T extends BaseEntity> extends
 
 	/**
 	 * Retrieves all the records on this object.
-	 *
+	 * 
 	 * @return List of objects
 	 */
-	@Transactional(readOnly = true)
-	public final List<T> findAll(final int start, final int total) {
+	@Transactional(readOnly=true)
+	public final List<T> findAll(int start, int total) {
 		return dao.findAll(start, total);
 	}
 
@@ -75,7 +66,7 @@ public class BaseCrudServiceImpl<T extends BaseEntity> extends
 	 * 
 	 * @return List of objects
 	 */
-	@Transactional(readOnly = true)
+	@Transactional(readOnly=true)
 	public final List<T> findByExample(T example) {
 		return dao.findByExample(example);
 	}
@@ -118,14 +109,6 @@ public class BaseCrudServiceImpl<T extends BaseEntity> extends
 	}
 
 	/**
-	 * Counts the matching record of this object
-	 */
-	@Transactional(readOnly=true)
-	public final long countByExample(T example, boolean exactMatch) {
-		return dao.countByExample(example, exactMatch);
-	}
-
-	/**
 	 * Loads an object based on the given id
 	 * 
 	 * @param id
@@ -153,7 +136,6 @@ public class BaseCrudServiceImpl<T extends BaseEntity> extends
 	 *            to load
 	 * @return object
 	 */
-	@Transactional(readOnly=true) 
 	public final T load(Long id) {
 		return dao.loadEntityModel(id);
 	}

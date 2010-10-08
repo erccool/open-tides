@@ -22,6 +22,6 @@
 </tr>
 <script language="javascript">
 IDEYATECH.crud.cancelNew('usergroup-');
-IDEYATECH.crud.refreshTable('usergroup-table-results', {})
+IDEYATECH.crud.refreshTable('usergroup-table-results')
 </script>
 </c:if>

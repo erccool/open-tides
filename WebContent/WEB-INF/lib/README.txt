@@ -44,8 +44,5 @@ activation.jar - jaf required by velocity
 mail.jar - javamail 1.4.1
 commons-lang-2.4 - required by velocity
 
-JASPER REPORTS:
-jasperreports-3.7.0.jar - required by Jasper Reports
-
 AJAX:
 json_simple.jar - For generating JSON response

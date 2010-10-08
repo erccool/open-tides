@@ -1,31 +1,21 @@
-/*
-   Licensed to the Apache Software Foundation (ASF) under one
-   or more contributor license agreements.  See the NOTICE file
-   distributed with this work for additional information
-   regarding copyright ownership.  The ASF licenses this file
-   to you under the Apache License, Version 2.0 (the
-   "License"); you may not use this file except in compliance
-   with the License.  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an
-   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   KIND, either express or implied.  See the License for the
-   specific language governing permissions and limitations
-   under the License.    
+/**
+ * 
+ * This source code is property of Ideyatech, Inc.
+ * All rights reserved. 
+ * 
+ * BaseEntityDAO.java
+ * Created on Jan 27, 2008, 4:09:49 PM
  */
 
 package org.opentides.persistence;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
 import org.opentides.bean.BaseEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -58,12 +48,6 @@ public interface BaseEntityDAO<T extends BaseEntity, ID extends Serializable> {
 	 * @return List of entity
 	 */
 	public List<T> findByNamedQuery(String name, Map<String, Object> params);
-	
-	/**
-	 * Returns all entries found by the named query with start and limit
-	 * @return List of entity
-	 */
-	public List<T> findByNamedQuery(final String name, final Map<String,Object> params, int start, int total);
 	
 	/**
 	 * Returns an entry found by the named query
@@ -140,31 +124,29 @@ public interface BaseEntityDAO<T extends BaseEntity, ID extends Serializable> {
 	 * @param lock - do we acquire a lock for writing
 	 * @return
 	 */
+	@Transactional(readOnly=false)
 	public T loadEntityModel(ID id, boolean lock);
 	
 	/**
 	 * Removes the entity
 	 * @param id
 	 */
+	@Transactional(readOnly=false)
 	public void deleteEntityModel(ID id);
 
 	/**
 	 * Removes the entity
 	 * @param obj
 	 */
+	@Transactional(readOnly=false)
 	public void deleteEntityModel(T obj);
 
 	/**
 	 * Add or update the entity as appropriate
 	 * @param obj
 	 */
+	@Transactional(readOnly=false)
 	public void saveEntityModel(T obj);
-	
-	/**
-	 * Add or update a collection of objects
-	 * @param objects
-	 */
-	public void saveAllEntityModel(Collection<T> objects);
 	
 	/**
 	 * Retrieves the jpql statement from preloaded properties file.

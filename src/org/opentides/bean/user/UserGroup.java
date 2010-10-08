@@ -1,28 +1,8 @@
-/*
-   Licensed to the Apache Software Foundation (ASF) under one
-   or more contributor license agreements.  See the NOTICE file
-   distributed with this work for additional information
-   regarding copyright ownership.  The ASF licenses this file
-   to you under the Apache License, Version 2.0 (the
-   "License"); you may not use this file except in compliance
-   with the License.  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an
-   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   KIND, either express or implied.  See the License for the
-   specific language governing permissions and limitations
-   under the License.    
- */
 package org.opentides.bean.user;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -32,11 +12,11 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import org.opentides.util.StringUtil;
 
 import org.opentides.bean.BaseCriteria;
 import org.opentides.bean.BaseEntity;
-import org.opentides.util.StringUtil;
 
 
 @Entity
@@ -44,7 +24,7 @@ import org.opentides.util.StringUtil;
 public class UserGroup extends BaseEntity implements BaseCriteria {
 	private static final long serialVersionUID = 1959110420702540834L;
 
-	@Column(name = "NAME", unique = true, nullable = false)
+	@Column(name = "NAME", unique = true)
 	private String name;
 
 	@Column(name = "DESCRIPTION")
@@ -57,11 +37,7 @@ public class UserGroup extends BaseEntity implements BaseCriteria {
 	@org.hibernate.annotations.Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<UserRole> roles;
 
-	@Transient
 	private transient List<String> roleNames; // used for checkboxes in UI
-	
-	@Transient
-	private transient Map<String, String> userRoleMap; // user for permission matrix in UI
 
 	public UserGroup() {
 		roles = new HashSet<UserRole>();
@@ -172,14 +148,6 @@ public class UserGroup extends BaseEntity implements BaseCriteria {
 		return name;
 	}
 
-	public String getVerticalTitle() {
-		StringBuffer vert = new StringBuffer(); 
-		for (int i=0; i<name.length(); i++) {
-			vert.append(name.charAt(i)).append("<br/>");
-		}
-		return vert.toString();
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -188,22 +156,6 @@ public class UserGroup extends BaseEntity implements BaseCriteria {
 		return roles;
 	}
 
-	public void mapRoleMatrix(Map<String, String> allRoles) {
-		userRoleMap = new HashMap<String, String>();
-		List<String> roleKeys = new ArrayList<String>();
-		for (UserRole role:this.roles)
-			roleKeys.add(role.getRole());
-		for (String key:allRoles.keySet()) {
-			if (roleKeys.contains(key)) {
-				userRoleMap.put(key, allRoles.get(key));
-			}
-		}
-	}
-	
-	public Map<String, String> getUserRoleMap() {
-		return userRoleMap;
-	}
-	
 	public void setRoles(Set<UserRole> roles) {
 		this.roles = roles;
 		syncRoleNames();

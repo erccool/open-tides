@@ -51,8 +51,9 @@ var Try = {
      * o.argument[2] {boolean} should javascript be executed
      */
 	var __replace = function(o){
+	  var replaceDiv = yDom.get(o.argument[0]);
 	  var userCallback = o.argument[1];
-	  IDEYATECH.util.updateInnerHTML(o.argument[0], o.responseText);
+	  replaceDiv.innerHTML = o.responseText;
 	  if ( !IDEYATECH.util.isEmpty(userCallback) ) {
 		try {
 		  userCallback.call();
@@ -74,7 +75,7 @@ var Try = {
  	  if (!IDEYATECH.util.isEmpty(rootId) && yDom.get(rootId)==null) {	
   	  	var parent = yDom.get(o.argument[0]);
 	  	var userCallback = o.argument[1];
-	  	IDEYATECH.util.updateInnerHTML(parent.id, parent.innerHTML + o.responseText);
+	  	parent.innerHTML = parent.innerHTML + o.responseText;	  
 	  	if ( !IDEYATECH.util.isEmpty(userCallback) ) {
 		  try {
 			userCallback.call();
@@ -119,44 +120,6 @@ var Try = {
 	}
 	
 	return {
-	
-		/**
-		  * Work around for innerHTML - replace value of an element
-		  * @id - id of the element
-		  * @replacement - new value that will be placed in the element of the given id
-		  */
-		updateInnerHTML: function(id, replacement) {
-			  // get tag of id
-			  var elem = yDom.get(id);
-			  var tag = elem.nodeName;			  
-			  // if elem is equals to div, skip other codes and just simply use innerHTML
-			  if (elem.nodeName == "DIV")
-			  	elem.innerHTML = replacement;
-			  else {
-			  	// look for parent that is div
-				var replaceDiv = elem.parentNode;
-				while(replaceDiv.nodeName != "0"){
-					if (replaceDiv.nodeName != "DIV"){
-				      replaceDiv = replaceDiv.parentNode;
-				    }
-				    if (replaceDiv.nodeName == "DIV"){
-				      div = replaceDiv;
-				      break;
-				    }	
-				  }
-				  // if div is found
-				  if (replaceDiv.nodeName != "0") {
-				    var oldHTML = replaceDiv.innerHTML;
-				    oldHTML = oldHTML.replace( /[\r\n\t]/g, '' );
-				    var re= new RegExp('<(\s*'+tag+'[^>]*id="?'+id+'"?[^>]*)>(.*?)(?:</table></'+tag+'[^>]*>|</'+tag+'[^>]*>)','i');
-				    //append tag to replacement
-				    replacement="<$1>" + replacement + "</" + tag +">";
-				    var newHTML= oldHTML.replace(re,replacement);
-				    replaceDiv.innerHTML = newHTML;
-				  }
-			  }
-		},
-			
 	    /**
 	     * Checks if a given variable is empty
 	     * @method isEmpty
@@ -297,7 +260,7 @@ var Try = {
 	   var el = this.getEl();
    	   var parent = el.parentNode;
    	   parent.removeChild(el);
-	   setTimeout("IDEYATECH.crud.refreshTable(('"+parent.id+"'), {})"); 
+	   setTimeout("IDEYATECH.crud.refreshTable('"+parent.id+"')"); 
 	}
 
 	var __failure = function(o) {
@@ -318,10 +281,11 @@ var Try = {
 		 */
 		refreshTable: function(divId, argument) {
 			var table = yDom.get(divId);
-			var prefix = argument['stylePrefix'];
-			if (prefix === undefined) {
-				prefix = 'row-style-';
-			}
+			var prefix = 'row-style-';
+			try {
+				prefix = argument['stylePrefix'];
+			} catch (err) {};
+
 			var children = table.getElementsByTagName('tr');
 			for (var i=0;i<children.length;i++) {
 				yDom.removeClass(children[i], prefix+'1');
@@ -352,7 +316,8 @@ var Try = {
 		 * @method cancelNew
 		 */
 		cancelNew: function(prefix) {
-		  IDEYATECH.util.updateInnerHTML(prefix+'row-new', "");
+		  var rownew = yDom.get(prefix+'row-new');
+		  rownew.innerHTML = "";
 		},
 		/**
 		 * Loads the add record form
@@ -376,7 +341,7 @@ var Try = {
 		editRecord: function(prefix, url) {
 			var args = {
 				divId: prefix,
-				evaluate: true
+				evaluate: false
 			}
 			IDEYATECH.util.loadPage(url, args);
 		}		
@@ -567,41 +532,4 @@ IDEYATECH.loading = function() {
             loader.show();
         }    
 	 };
-}();
-
-/**
- * Javascript sorting by header with arrow characters
- */ 
- 
-IDEYATECH.sort = function() {
-	return {
-	   	sortByHeader:function(newSortFieldValue, searchFormId) {
-		   	var sortFieldValue = yDom.get(searchFormId + '-order-by').value;
-		   	var sortFlowValue = yDom.get(searchFormId + '-order-flow').value;
-		   	var newSortFlowValue;
-		   	
-		   	if (sortFieldValue != newSortFieldValue) {
-		   		newSortFlowValue = 'ASC';
-		   	} else {
-		    		if (sortFlowValue == 'DESC') {
-		    		newSortFlowValue = 'ASC';
-		    	} else {
-		    		newSortFlowValue = 'DESC';
-		    	}
-		   	}
-		   	
-		   	yDom.get(searchFormId + '-order-by').value = newSortFieldValue;
-		   	yDom.get(searchFormId + '-order-flow').value = newSortFlowValue;
-		   	yDom.get(searchFormId).submit();
-	   }
-	}	    
-}();
-
-IDEYATECH.paging = function() {
-	return {
-		searchByPage:function(searchFormId, baseURL, pageNum) {
-			yDom.get(searchFormId).action = baseURL + '?page=' + pageNum;
-		   	yDom.get(searchFormId).submit();
-		}
-	}
 }();

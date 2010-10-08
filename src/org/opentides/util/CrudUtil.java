@@ -1,40 +1,27 @@
-/*
-   Licensed to the Apache Software Foundation (ASF) under one
-   or more contributor license agreements.  See the NOTICE file
-   distributed with this work for additional information
-   regarding copyright ownership.  The ASF licenses this file
-   to you under the Apache License, Version 2.0 (the
-   "License"); you may not use this file except in compliance
-   with the License.  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an
-   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   KIND, either express or implied.  See the License for the
-   specific language governing permissions and limitations
-   under the License.    
+/**
+ * 
+ * This source code is property of Ideyatech, Inc.
+ * All rights reserved. 
+ * 
+ * CrudUtil.java
+ * Created on Feb 10, 2008, 2:03:48 PM
  */
-
 package org.opentides.util;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.opentides.InvalidImplementationException;
 import org.opentides.bean.Auditable;
 import org.opentides.bean.AuditableField;
 import org.opentides.bean.BaseCriteria;
 import org.opentides.bean.BaseEntity;
-import org.opentides.bean.SystemCodes;
+
+import org.opentides.InvalidImplementationException;
 
 /**
  * @author allanctan
@@ -103,8 +90,8 @@ public class CrudUtil {
 		for (AuditableField property:auditFields) {
 			Object oldValue = retrieveNullableObjectValue(oldObject, property.getFieldName());
 			Object newValue = retrieveNullableObjectValue(newObject, property.getFieldName());
-			if (oldValue == null) oldValue = "";
-			if (newValue == null) newValue = "";
+			if (oldValue == null) oldValue = new String("");
+			if (newValue == null) newValue = new String("");
 			if (!oldValue.equals(newValue)) {
 				if (count > 0) 
 					message.append(" and ");
@@ -166,12 +153,6 @@ public class CrudUtil {
 						.append(" like '%")
 						.append(ret.toString())
 						.append("%'");
-				} else if(SystemCodes.class.isAssignableFrom(ret.getClass())) {
-					SystemCodes sc = (SystemCodes) ret;
-					clause.append(property)
-					.append(".key")
-					.append(" = ")
-					.append(sc.getKey());
 				} else if(BaseEntity.class.isAssignableFrom(ret.getClass())) {
 					BaseEntity be = (BaseEntity) ret;
 					clause.append(property)
@@ -332,12 +313,10 @@ public class CrudUtil {
 		Matcher sqlMatcher =  CrudUtil.SQL_PARAM_PATTERN.matcher(sql);
 		while (sqlMatcher.find()) {
 			String param = sqlMatcher.group(1);
-			Object valueObject = CrudUtil.retrieveNullableObjectValue(obj, param); 
-			if (valueObject==null) {
-				sql = sql.replace(sqlMatcher.group(), "null");				
-			} else if (String.class.isAssignableFrom(valueObject.getClass())) {
+			Object valueObject = CrudUtil.retrieveObjectValue(obj, param); 
+			if (String.class.isAssignableFrom(valueObject.getClass()))
 				sql = sql.replace(sqlMatcher.group(), "'"+valueObject.toString()+"'");
-			} else if (Collection.class.isAssignableFrom(valueObject.getClass())) {
+			else if(Collection.class.isAssignableFrom(valueObject.getClass())) {
 				Collection<Object> list = (Collection<Object>) valueObject;
 				int ctr=0;
 				String comma = "";
@@ -381,21 +360,5 @@ public class CrudUtil {
 			_log.warn("Attempt to get readableName for unknown class ["+entityClass+"]");
 			return "";
 		}
-	}
-
-	/**
-	 * Helper method to retrieve all fields of a class including
-	 * fields declared in its superclass.
-	 * @param clazz
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public static List<Field> getAllFields(Class clazz) {
-		List<Field> fields = new ArrayList<Field>();
-		if (BaseEntity.class.isAssignableFrom(clazz))
-			fields.addAll(getAllFields(clazz.getSuperclass()));
-		for (Field field:clazz.getDeclaredFields())
-			fields.add(field);
-		return fields;
 	}
 }

@@ -5,7 +5,7 @@
 <%@ taglib prefix="ot" uri="http://www.ideyatech.com/tides"%>
 
 <c:if test="${newRow}">
-<tr id="user-row-${user.id}" status="new">
+<tr id="lookup-row-${user.id}" status="new">
 </c:if>
 	<td><c:out value="${user.firstName}" /></td>
 	<td><c:out value="${user.lastName}" /></td>
@@ -23,6 +23,6 @@
 </tr>
 <script language="javascript">
 IDEYATECH.crud.cancelNew('user-');
-IDEYATECH.crud.refreshTable('user-table-results', {})
+IDEYATECH.crud.refreshTable('user-table-results')
 </script>
 </c:if>

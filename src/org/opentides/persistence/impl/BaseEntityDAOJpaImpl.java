@@ -1,26 +1,7 @@
-/*
-   Licensed to the Apache Software Foundation (ASF) under one
-   or more contributor license agreements.  See the NOTICE file
-   distributed with this work for additional information
-   regarding copyright ownership.  The ASF licenses this file
-   to you under the Apache License, Version 2.0 (the
-   "License"); you may not use this file except in compliance
-   with the License.  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an
-   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   KIND, either express or implied.  See the License for the
-   specific language governing permissions and limitations
-   under the License.    
- */
 package org.opentides.persistence.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -36,10 +17,8 @@ import org.opentides.bean.Auditable;
 import org.opentides.bean.BaseCriteria;
 import org.opentides.bean.BaseEntity;
 import org.opentides.bean.BaseProtectedEntity;
-import org.opentides.bean.Sortable;
 import org.opentides.bean.user.BaseUser;
 import org.opentides.bean.user.SessionUser;
-import org.opentides.listener.ApplicationStartupListener;
 import org.opentides.persistence.BaseEntityDAO;
 import org.opentides.util.AcegiUtil;
 import org.opentides.util.CrudUtil;
@@ -67,19 +46,11 @@ public class BaseEntityDAOJpaImpl<T extends BaseEntity,ID extends Serializable>
 	@PersistenceContext
     private EntityManager em;
    
-	private int batchSize = 20;
-	
 	@SuppressWarnings("unchecked")
 	public BaseEntityDAOJpaImpl() {
-		// identify the bean we are processing for this DAO 
-		try {
-	        this.entityBeanType = (Class<T>) ((ParameterizedType) getClass()
-	                .getGenericSuperclass()).getActualTypeArguments()[0];
-		} catch (ClassCastException cc) {
-			// if dao is extended from the generic dao class
-			this.entityBeanType = (Class<T>) ((ParameterizedType) getClass().getSuperclass()
-	                .getGenericSuperclass()).getActualTypeArguments()[0];
-		}
+		// identify the bean we are processing for this DAO
+        this.entityBeanType = (Class<T>) ((ParameterizedType) getClass()
+                .getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 
 	public final T loadEntityModel(ID id, boolean lock) {
@@ -96,7 +67,11 @@ public class BaseEntityDAOJpaImpl<T extends BaseEntity,ID extends Serializable>
 	
 	public final void saveEntityModel(T obj) {
 		// if class is auditable, we need to ensure userId is present
-		setAuditUserId(obj);
+		if (Auditable.class.isAssignableFrom(obj.getClass())) {
+			Auditable auditable = (Auditable) obj;
+			if (auditable.getUserId()==null)
+				auditable.setUserId();
+		}
 		if (obj.isNew())
 			this.addEntityModel(obj);
 		else
@@ -104,14 +79,12 @@ public class BaseEntityDAOJpaImpl<T extends BaseEntity,ID extends Serializable>
 	}
 	
 	public final void deleteEntityModel(ID id) {
-		T obj = getEntityManager().find(getEntityBeanType(), id);
-		deleteEntityModel(obj);
+		Object obj = getEntityManager().find(getEntityBeanType(), id);
+		getEntityManager().remove(obj);
 	}
 	
 	public final void deleteEntityModel(T obj) {
-		setAuditUserId(obj);
 		getEntityManager().remove(obj);
-		getEntityManager().flush();
 	}
 
 	public final List<T> findAll() {
@@ -190,24 +163,46 @@ public class BaseEntityDAOJpaImpl<T extends BaseEntity,ID extends Serializable>
 		}
 	}
 
-	public final List<T> findByNamedQuery(final String name, final Map<String,Object> params) {
-		return findByNamedQuery(name, params, -1, -1);
+	/**
+	 * Override this method to append additional query conditions for findByExample.
+	 * Useful for date range and other complex queries.
+	 * @param example
+	 * @param exactMatch
+	 * @return
+	 */
+	protected String appendClauseToExample(T example, boolean exactMatch) {
+		return "";
+	}
+	
+	/**
+	 * Override this method to append order clause to findByExample.
+	 * @param example
+	 * @return
+	 */
+	protected String appendOrderToExample(T example) {
+		return "";
+	}
+
+	protected final void addEntityModel(T obj) {
+		getEntityManager().persist(obj);
+	}
+	
+	protected final void updateEntityModel(T obj) {
+		getEntityManager().merge(obj);
+		getEntityManager().flush();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public final List<T> findByNamedQuery(final String name, final Map<String,Object> params, int start, int total) {
+	public final List<T> findByNamedQuery(final String name, final Map<String,Object> params) {
 		String queryString = getJpqlQuery(name);
 		Query queryObject = getEntityManager().createQuery(queryString);
 		if (params != null) {
 			for (Map.Entry<String, Object> entry:params.entrySet())
 				queryObject.setParameter(entry.getKey(), entry.getValue());
 		}
-		if (start > -1) 
-			queryObject.setFirstResult(start);
-		if (total > -1)
-			queryObject.setMaxResults(total);	
 		return queryObject.getResultList();
 	}
+	
 	@SuppressWarnings({ "unchecked" })
 	public final T findSingleResultByNamedQuery(final String name, final Map<String,Object> params) {
 		String queryString = getJpqlQuery(name);
@@ -249,57 +244,20 @@ public class BaseEntityDAOJpaImpl<T extends BaseEntity,ID extends Serializable>
 	public final void setEntityManager(EntityManager em) {
         this.em = em;
     }
-	  
-	/**
-	 * @param securityFilter the securityFilter to set
-	 */
-	public final void setSecurityFilter(Map<String, String> filter) {
-		this.securityFilter = filter;
-	}
 
     protected final EntityManager getEntityManager() {
         if (em == null)
             throw new IllegalStateException("EntityManager has not been set on DAO before usage");
         return em;
     }
-
+  
 	/**
-	 * Override this method to append additional query conditions for findByExample.
-	 * Useful for date range and other complex queries.
-	 * @param example
-	 * @param exactMatch
-	 * @return
+	 * @param securityFilter the securityFilter to set
 	 */
-	protected String appendClauseToExample(T example, boolean exactMatch) {
-		return "";
+	public final void setSecurityFilter(Map<String, String> filter) {
+		this.securityFilter = filter;
 	}
 	
-	/**
-	 * Override this method to append order clause to findByExample.
-	 * @param example
-	 * @return
-	 */
-	protected String appendOrderToExample(T example) {
-		String clause="";
-		
-		if (example instanceof Sortable) {
-			Sortable criteria = (Sortable) example;
-			//for search list ordering
-			if(!StringUtil.isEmpty(criteria.getOrderOption()) && !StringUtil.isEmpty(criteria.getOrderFlow())){
-				clause="ORDER BY "+ criteria.getOrderOption() +" "+ criteria.getOrderFlow() +"";
-			}
-		}
-		return clause;
-	}
-
-	protected final void addEntityModel(T obj) {
-		getEntityManager().persist(obj);
-	}
-	
-	protected final void updateEntityModel(T obj) {
-		getEntityManager().merge(obj);
-		getEntityManager().flush();
-	}
 	
 	/**
 	 * Private helper to build clause for security based filtering restriction 
@@ -307,11 +265,8 @@ public class BaseEntityDAOJpaImpl<T extends BaseEntity,ID extends Serializable>
 	 * @return
 	 */
 	private String buildSecurityFilterClause(T example) {
-		// no protection implemented during application startup 
-		// and when not implementing BaseProtectedEntity 
-		if ( ApplicationStartupListener.isApplicationStarted() && 
-				example != null &&
-				BaseProtectedEntity.class.isAssignableFrom(example.getClass())) {
+		if (example != null &&
+			BaseProtectedEntity.class.isAssignableFrom(example.getClass())) {
 			BaseProtectedEntity bpe = (BaseProtectedEntity) example;
 			if (!bpe.isDisableProtection()) {
 				// retrieve list of available security filters
@@ -340,41 +295,5 @@ public class BaseEntityDAOJpaImpl<T extends BaseEntity,ID extends Serializable>
 			whereClause += append;
 		}			
 		return whereClause;
-	}
-	
-	/**
-	 * Sets the userId within the web session for audit logging.
-	 * @param obj
-	 */
-	private void setAuditUserId(T obj) {
-		if (Auditable.class.isAssignableFrom(obj.getClass())) {
-			Auditable auditable = (Auditable) obj;
-			if (auditable.getAuditUserId()==null)
-				auditable.setUserId();			
-		}
-	}
-
-	/**
-	 * Adds or updates a collection of model objects using
-	 * the recommended way of saving collections from the Hibernate site.
-	 * @param objects
-	 */
-	public void saveAllEntityModel(Collection<T> objects) {
-		int ctr = 0;
-		for (T t : objects) {
-			saveEntityModel(t);
-			if (++ctr % batchSize == 0){
-				getEntityManager().flush();
-				getEntityManager().clear();
-			}
-		}
-	}
-
-	public int getBatchSize() {
-		return batchSize;
-	}
-
-	public void setBatchSize(int batchSize) {
-		this.batchSize = batchSize;
 	}
 }

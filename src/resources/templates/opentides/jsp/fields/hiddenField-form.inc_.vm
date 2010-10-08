@@ -1,1 +1,0 @@
-<form:hidden path="${field.fieldName}" #foreach( $springParam in $field.springParams )${springParam} #end/>

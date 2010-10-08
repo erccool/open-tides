@@ -1,35 +1,11 @@
-/*
-   Licensed to the Apache Software Foundation (ASF) under one
-   or more contributor license agreements.  See the NOTICE file
-   distributed with this work for additional information
-   regarding copyright ownership.  The ASF licenses this file
-   to you under the Apache License, Version 2.0 (the
-   "License"); you may not use this file except in compliance
-   with the License.  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an
-   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   KIND, either express or implied.  See the License for the
-   specific language governing permissions and limitations
-   under the License.    
- */
-
 package org.opentides.util;
 
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
 import org.opentides.InvalidImplementationException;
 
 import sun.misc.BASE64Decoder;
@@ -39,8 +15,6 @@ public class StringUtil {
     
 	private static String zeros = "0000000000";
 	private static Random random = new Random((new Date()).getTime());
-	
-	private static Logger _log = Logger.getLogger(StringUtil.class);
         
     public static boolean isEmpty(String obj) {
     	if ((obj==null) || (obj.trim().length()==0))
@@ -125,29 +99,10 @@ public class StringUtil {
 			md.update(clearTextPassword.getBytes());
 			return new sun.misc.BASE64Encoder().encode(md.digest());
 		} catch (NoSuchAlgorithmException e) {
-			_log.error("Failed to encrypt password.", e);
+			e.printStackTrace();
 		}
 		return "";
 	}
-	
-    /**
-     * Generates a hash code for a given source code. 
-     * This method ignores whitespace in generating the hash code.
-     * @param source
-     * @return
-     */
-	public static String hashSourceCode(String source) {	
-		MessageDigest md;
-		try {
-			md = MessageDigest.getInstance("MD5");
-			md.update(source.getBytes());
-			return new sun.misc.BASE64Encoder().encode(md.digest());
-		} catch (NoSuchAlgorithmException e) {
-			_log.error("Failed to generate hashcode.", e);
-		}   
-		return null;
-	}
-	
     /**
      * Encrypts the string along with salt 
      * @param userId
@@ -186,186 +141,4 @@ public class StringUtil {
 		} else
 			return null;				
 	}
-	
-	/**
-	 * Parse a line of text in standard CSV format and returns array of Strings
-	 * @param csvLine
-	 * @return
-	 */
-    public static String[] parseCsvLine(String csvLine) {
-    	return StringUtil.parseCsvLine(csvLine, ',', '"', '\\', false);
-    }
-    
-	/**
-	 * Parse a line of text in CSV format and returns array of Strings
-	 * Implementation of parsing is extracted from open-csv.
-	 * http://opencsv.sourceforge.net/
-	 * 
-	 * @param csvLine
-	 * @param separator
-	 * @param quotechar
-	 * @param escape
-	 * @param strictQuotes
-	 * @return
-	 * @throws IOException
-	 */
-    public static String[] parseCsvLine(String csvLine, 
-    									char separator, char quotechar, 
-    									char escape, boolean strictQuotes) {
-    	
-        List<String>tokensOnThisLine = new ArrayList<String>();
-        StringBuilder sb = new StringBuilder(50);
-        boolean inQuotes = false;
-        for (int i = 0; i < csvLine.length(); i++) {
-        	char c = csvLine.charAt(i);
-        	if (c == escape) {
-    		    boolean isNextCharEscapable = inQuotes  // we are in quotes, therefore there can be escaped quotes in here.
-    		    						    && csvLine.length() > (i+1)  // there is indeed another character to check.
-    		    						    && ( csvLine.charAt(i+1) == quotechar || csvLine.charAt(i+1) == escape);
-
-        		if( isNextCharEscapable ){
-        			sb.append(csvLine.charAt(i+1));
-        			i++;
-        		} 
-        	} else if (c == quotechar) {
-        		boolean isNextCharEscapedQuote = inQuotes  // we are in quotes, therefore there can be escaped quotes in here.
-								&& csvLine.length() > (i+1)  // there is indeed another character to check.
-								&& csvLine.charAt(i+1) == quotechar;
-        		if( isNextCharEscapedQuote ){
-        			sb.append(csvLine.charAt(i+1));
-        			i++;
-        		}else{
-        			inQuotes = !inQuotes;
-        			// the tricky case of an embedded quote in the middle: a,bc"d"ef,g
-                    if (!strictQuotes) {
-                        if(i>2 //not on the beginning of the line
-                                && csvLine.charAt(i-1) != separator //not at the beginning of an escape sequence
-                                && csvLine.length()>(i+1) &&
-                                csvLine.charAt(i+1) != separator //not at the	end of an escape sequence
-                        ){
-                            sb.append(c);
-                        }
-                    }
-        		}
-        	} else if (c == separator && !inQuotes) {
-        		tokensOnThisLine.add(sb.toString());
-        		sb = new StringBuilder(50); // start work on next token
-        	} else {
-                if (!strictQuotes || inQuotes)
-                    sb.append(c);
-        	}
-        }
-        // line is done - check status
-        if (inQuotes) {
-        	_log.warn("Un-terminated quoted field at end of CSV line. \n ["+csvLine+"]");
-        }
-        if (sb != null) {
-        	tokensOnThisLine.add(sb.toString());
-        }
-        return tokensOnThisLine.toArray(new String[tokensOnThisLine.size()]);
-    }
-    
-    /**
-     * Combines an array of string into one string using the specified separator.
-     * @param separator
-     * @param input
-     * @return
-     */
-    public static final String explode(char separator, String[] input) {
-    	if (input==null) 
-    		return null;
-    	int count=0;
-    	StringBuffer out = new StringBuffer();
-    	for (String word:input) {
-    		if (count++ > 0)
-    			out.append(separator);
-    		out.append(word);
-    	}
-    	return out.toString();
-    }
-    
-	@Deprecated
-	public static String dateToString(Date obj, String format) {
-    	if (obj == null)
-    		return "";    	
-        SimpleDateFormat dtFormatter = new SimpleDateFormat(format);
-        return dtFormatter.format(obj);	
-	}
-    
-	@Deprecated
-    public static Date stringToDate(String strDate, String format) throws ParseException {
-        SimpleDateFormat dtFormatter = new SimpleDateFormat(format);
-        if (StringUtil.isEmpty(strDate))
-        	throw new ParseException("Cannot convert empty string to Date.", 0);
-       	return dtFormatter.parse(strDate.trim());
-    }
-    
-	@Deprecated
-    public static Date convertFlexibleDate(String strDate, String[] formats) throws ParseException {
-    	if (StringUtil.isEmpty(strDate))
-    		return null;    	
-    	for (int i=0; i<formats.length; i++) {
-            try {
-            	SimpleDateFormat dtFormatter = new SimpleDateFormat(formats[i]);
-            	dtFormatter.setLenient(false);
-            	return dtFormatter.parse(strDate.trim());
-            } catch (ParseException e) {
-            	// do nothing... try other format
-            }    	
-    	}
-    	// we are unable to convert
-    	throw new ParseException("No matching date format for "+strDate, 0);    	
-    }
-
-	@Deprecated
-    public static String convertShortDate(Date obj) {
-    	return dateToString(obj, "yyyyMMdd");
-    }
-    
-	@Deprecated
-    public static Date convertShortDate(String str) throws ParseException {
-    	return stringToDate(str, "yyyyMMdd");
-    }
-
-	@Deprecated
-    public static Date convertShortDate(String str, Date defaultDate) {
-    	try {
-    		return stringToDate(str, "yyyyMMdd");
-    	} catch (ParseException pex) {
-    		return defaultDate;
-    	}
-    }
- 
-	@Deprecated
-    public static Date convertFlexibleDate(String strDate) throws ParseException {
-    	if (StringUtil.isEmpty(strDate))
-    		throw new ParseException("Cannot convert empty string to Date.", 0);
-
-    	String[] formats = { "MM/dd/yyyy",
-    					     "MM-dd-yyyy", 
-    					     "yyyyMMdd",
-    					     "yyyy-MM-dd",
-						     "MMM dd yyyy",
-						     "MMM dd, yyyy",
-    					     "MMM yyyy",
-						     "MM/yyyy",
-						     "MM-yyyy",
-						     "yyyy"};
-
-   		return convertFlexibleDate(strDate, formats);
-    }   
-    
-    @Deprecated
-    public static boolean compareNullableDates(Date date1, Date date2) {
-    	if ((date1==null) && (date2==null))
-    		return true;
-    	if (date1!=null) {
-    		if (date1.equals(date2))
-    			return true;
-    		else
-    			return false;
-    	}
-    	return false;
-    }
-
 }

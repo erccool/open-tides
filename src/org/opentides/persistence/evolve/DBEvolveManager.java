@@ -1,27 +1,7 @@
-/*
-   Licensed to the Apache Software Foundation (ASF) under one
-   or more contributor license agreements.  See the NOTICE file
-   distributed with this work for additional information
-   regarding copyright ownership.  The ASF licenses this file
-   to you under the Apache License, Version 2.0 (the
-   "License"); you may not use this file except in compliance
-   with the License.  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an
-   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   KIND, either express or implied.  See the License for the
-   specific language governing permissions and limitations
-   under the License.    
- */
 package org.opentides.persistence.evolve;
 
 import java.util.Collections;
 import java.util.List;
-
-import javax.persistence.NoResultException;
 
 import org.apache.log4j.Logger;
 import org.opentides.InvalidImplementationException;
@@ -47,12 +27,7 @@ public class DBEvolveManager {
 	public void evolve() {
 
 		// get current db version
-		SystemCodes version;
-		try {
-		    version = systemCodesDAO.loadBySystemCodesByKey("DB_VERSION");
-		} catch (NoResultException nre) {
-		    version = null;
-		}
+		SystemCodes version = systemCodesDAO.loadBySystemCodesByKey("DB_VERSION");
 		if (version==null) {
 			// no version available yet, lets create one
 			version = new SystemCodes();
@@ -84,11 +59,11 @@ public class DBEvolveManager {
 		}
 		
 		// get number of latest evolve script
-		long currVersion   = version.getNumberValue();
-		long latestVersion = evolveList.get(evolveList.size()-1).getVersion();
+		int currVersion   = version.getNumberValue().intValue();
+		int latestVersion = evolveList.get(evolveList.size()-1).getVersion();
 		
 		if (currVersion>=latestVersion) {
-			_log.info("Database is already at version " + currVersion);
+			_log.info("Database is updated at version " + currVersion);
 			return;
 		} else {
 			_log.info("Updating database from version " + currVersion +" to version " + latestVersion );
@@ -101,14 +76,14 @@ public class DBEvolveManager {
 				_log.info("Executing evolve version ["+evolve.getVersion()+"] - "+evolve.getDescription());
 				evolve.execute();
 				// if successful, update current db version
-				version.setNumberValue(Long.valueOf(evolve.getVersion()));
+				version.setNumberValue(new Long(evolve.getVersion()));
 				version.setSkipAudit(true);
 				systemCodesDAO.saveEntityModel(version);
 				_log.info("Success.");
 			}
 		}
 		// as precaution let's update db version again
-		version.setNumberValue(Long.valueOf(latestVersion));
+		version.setNumberValue(new Long(latestVersion));
 		version.setSkipAudit(true);
 		systemCodesDAO.saveEntityModel(version);
 		

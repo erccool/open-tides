@@ -1,20 +1,10 @@
-/*
-   Licensed to the Apache Software Foundation (ASF) under one
-   or more contributor license agreements.  See the NOTICE file
-   distributed with this work for additional information
-   regarding copyright ownership.  The ASF licenses this file
-   to you under the Apache License, Version 2.0 (the
-   "License"); you may not use this file except in compliance
-   with the License.  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an
-   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   KIND, either express or implied.  See the License for the
-   specific language governing permissions and limitations
-   under the License.    
+/**
+ * 
+ * This source code is property of Ideyatech, Inc.
+ * All rights reserved. 
+ * 
+ * UserServiceImpl.java
+ * Created on Feb 22, 2008, 12:31:18 AM
  */
 package org.opentides.service.impl;
 
@@ -29,11 +19,11 @@ import org.acegisecurity.concurrent.SessionRegistry;
 import org.acegisecurity.event.authentication.AuthenticationSuccessEvent;
 import org.apache.log4j.Logger;
 import org.opentides.InvalidImplementationException;
-import org.opentides.bean.MailMessage;
 import org.opentides.bean.PasswordReset;
 import org.opentides.bean.user.BaseUser;
 import org.opentides.bean.user.UserCredential;
 import org.opentides.bean.user.UserGroup;
+import org.opentides.mail.MailMessage;
 import org.opentides.persistence.PasswordResetDAO;
 import org.opentides.persistence.UserDAO;
 import org.opentides.persistence.UserGroupDAO;
@@ -231,7 +221,6 @@ public class UserServiceImpl extends BaseCrudServiceImpl<BaseUser> implements
 			// Let's super user role
 			List<String> roleNames = new ArrayList<String>();
 			roleNames.add("SUPER_USER");
-			roleNames.add("ACCESS_ALL");
 			userGroup.setRoleNames(roleNames);
 			userGroupDAO.saveEntityModel(userGroup);
 

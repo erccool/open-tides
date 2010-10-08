@@ -1,20 +1,5 @@
-/*
-   Licensed to the Apache Software Foundation (ASF) under one
-   or more contributor license agreements.  See the NOTICE file
-   distributed with this work for additional information
-   regarding copyright ownership.  The ASF licenses this file
-   to you under the Apache License, Version 2.0 (the
-   "License"); you may not use this file except in compliance
-   with the License.  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an
-   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   KIND, either express or implied.  See the License for the
-   specific language governing permissions and limitations
-   under the License.    
+/**
+ * 
  */
 package org.opentides.bean;
 
@@ -33,7 +18,7 @@ import javax.persistence.Transient;
 import org.opentides.bean.user.BaseUser;
 import org.opentides.persistence.listener.AuditLogListener;
 import org.opentides.util.CrudUtil;
-import org.opentides.util.StringUtil;
+
 
 /**
  * This class is responsible for handling all audit functions needed to be
@@ -42,231 +27,133 @@ import org.opentides.util.StringUtil;
  * @author allantan
  */
 @Entity
-@EntityListeners({ AuditLogListener.class })
+@EntityListeners( { AuditLogListener.class })
 @Table(name = "HISTORY_LOG")
 public class AuditLog extends BaseProtectedEntity implements Serializable,
-		BaseCriteria, Cloneable {
-
-    /**
-     * Auto-generated class UID.
-     */
-    private static final long serialVersionUID = 269168041517643087L;
-
-    /**
-     * Primary key of object being tracked.
-     */
-    @Column(name = "ENTITY_ID", nullable = false, updatable = false)
-    private Long entityId;
-    
-    /**
-     * Class type of object being tracked.
-     */
-    @SuppressWarnings("unchecked")
-    @Column(name = "ENTITY_CLASS", nullable = false, updatable = false)
-    private Class entityClass;
-    
-    /**
-     * Arbitrary reference to object being tracked.
-     * Use this attribute to store single reference string to different 
-     * classes that are interrelated.
-     */
-    @Column(name = "REFERENCE")
-    private String reference;
-    
-    /**
-     * Message about the actions done.
-     */
-    @Lob
-    @Column(name = "MESSAGE", nullable = false, updatable = false)
-    private String message;
-    
-    /**
-     * User who performed the change.
-     */
-    @Column(name = "USER_ID", nullable = false, updatable = false)
-    private Long userId;
-
-    /**
-     * Temporary reference to object being tracked.
-     * Used by AuditLogListener when loading audit log object.
-     */
-    @Transient
-    private transient Object object;
-    
-    /**
-     * Temporary reference to used who made the change.
-     * Used by AuditLogListener when loading audit log object.
-     * 
-     */
-    @Transient
-    private transient BaseUser user;
+		BaseCriteria {
+	private static final long serialVersionUID = 269168041517643087L;
+	@Column(name = "ENTITY_ID", nullable = false, updatable = false)
+	private Long entityId;
+	@SuppressWarnings("unchecked")
+	@Column(name = "ENTITY_CLASS", nullable = false, updatable = false)
+	private Class entityClass;
+	@Column(name = "REFERENCE")
+	private String reference;
+	@Lob
+	@Column(name = "MESSAGE", nullable = false, updatable = false)
+	private String message;
+	@Column(name = "USER_ID", nullable = false, updatable = false)
+	private Long userId;
 	@Transient
-	private transient Date startDate;
+	private transient Object object;
 	@Transient
-	private transient Date endDate;
-	@Transient
-	private transient Boolean outOfOfficeHours;
-	@Transient
-	private transient int officeStartHour;
-	@Transient
-	private transient int officeEndHour;
-	
-	@Transient
-	private transient String entityName = "";
+	private transient BaseUser user;
 
-    /**
-     * Default constructor.
-     */
-    protected AuditLog() {
-    };
+	public AuditLog() {
+	};
 
-    /**
-     * Standard constructor.
-     * 
-     * @param message message to log. If blank, message is automatically generated.
-     * @param entityId id of object being tracked.
-     * @param entityClass class name of object being tracked.
-     * @param reference reference for group query.
-     * @param userId user id of who made the change.
-     * @param owner username of who made the change.
-     * @param ownerOffice group of user who made the change.
-     */
-    @SuppressWarnings("unchecked")
-    public AuditLog(final String message, 
-            final Long entityId, 
-            final Class entityClass,
-            final String reference,
-            final Long userId,
-            final String owner,
-            final String ownerOffice) {
-        this.message = message;
-        this.entityId = entityId;
-        this.entityClass = entityClass;
-        this.reference = reference;
-        this.userId = userId;
-        this.setCreateDate(new Date());
-        this.setOwner(owner);
-        this.setOwnerOffice(ownerOffice);
-    }
+	@SuppressWarnings("unchecked")
+	public AuditLog(String message, Long entityId, Class entityClass,
+			Long userId) {
+		this.message = message;
+		this.entityId = entityId;
+		this.entityClass = entityClass;
+		this.userId = userId;
+		this.setCreateDate(new Date());
+	}
 
-    /**
-     * Getter of entity id.
-     * 
-     * @return entityId
-     */
-    public final Long getEntityId() {
-        return this.entityId;
-    }
+	/**
+	 * @return the entityId
+	 */
+	public Long getEntityId() {
+		return entityId;
+	}
 
-    /**
-     * Setter of entity id.
-     * 
-     * @param entityId
-     *            the entityId to set
-     */
-    protected final void setEntityId(final Long entityId) {
-        this.entityId = entityId;
-    }
+	/**
+	 * @param entityId
+	 *            the entityId to set
+	 */
+	public final void setEntityId(Long entityId) {
+		this.entityId = entityId;
+	}
 
-    /**
-     * Getter of entity class.
-     * 
-     * @return the entityClass
-     */
-    @SuppressWarnings("unchecked")
-    public final Class getEntityClass() {
-        return this.entityClass;
-    }
+	/**
+	 * @return the entityClass
+	 */
+	@SuppressWarnings("unchecked")
+	public Class getEntityClass() {
+		return entityClass;
+	}
 
-    /**
-     * Setter of entity class.
-     * 
-     * @param entityClass
-     *            the entityClass to set
-     */
-    @SuppressWarnings("unchecked")
-    protected final void setEntityClass(final Class entityClass) {
-        this.entityClass = entityClass;
-    }
+	/**
+	 * @param entityClass
+	 *            the entityClass to set
+	 */
+	@SuppressWarnings("unchecked")
+	public final void setEntityClass(Class entityClass) {
+		this.entityClass = entityClass;
+	}
 
-    /**
-     * Returns a human readable name of the logged entity.
-     * 
-     * @return entity name
-     */
-    public final String getEntityName() {
-        if (!StringUtil.isEmpty(entityName)){
-            return entityName;
-        }
+	/**
+	 * Returns a human readable name of the logged entity.
+	 * 
+	 * @return
+	 */
+	public String getEntityName() {
 		return CrudUtil.getReadableName(entityClass.getName());
-    }
+	}
 
-    /**
-     * Getter of message.
-     * 
-     * @return the message
-     */
-    public final String getMessage() {
-        return this.message;
-    }
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
 
-    /**
-     * Getter of user id.
-     * 
-     * @return the userId
-     */
-    public final Long getUserId() {
-        return this.userId;
-    }
+	/**
+	 * @return the userId
+	 */
+	public Long getUserId() {
+		return userId;
+	}
 
-    /**
-     * Setter of user id.
-     * 
-     * @param userId
-     *            the userId to set
-     */
-    protected final void setUserId(final Long userId) {
-        this.userId = userId;
-    }
+	/**
+	 * @param userId
+	 *            the userId to set
+	 */
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
-    /**
-     * Getter of object.
-     * 
-     * @return the object
-     */
-    public final Object getObject() {
-        return this.object;
-    }
+	/**
+	 * @return the object
+	 */
+	public Object getObject() {
+		return object;
+	}
 
-    /**
-     * Setter of object.
-     * 
-     * @param object
-     *            the object to set
-     */
-    public final void setObject(final Object object) {
-        this.object = object;
-    }
+	/**
+	 * @param object
+	 *            the object to set
+	 */
+	public void setObject(Object object) {
+		this.object = object;
+	}
 
-    /**
-     * Getter of user object.
-     * 
-     * @return the user
-     */
-    public final BaseUser getUser() {
-        return this.user;
-    }
+	/**
+	 * @return the user
+	 */
+	public BaseUser getUser() {
+		return user;
+	}
 
-    /**
-     * Setter of user object.
-     * 
-     * @param user
-     *            the user to set
-     */
-    public final void setUser(final BaseUser user) {
-        this.user = user;
-    }
-
+	/**
+	 * @param user
+	 *            the user to set
+	 */
+	public void setUser(BaseUser user) {
+		this.user = user;
+	}
 
 	public List<String> getSearchProperties() {
 		List<String> fields = new ArrayList<String>();
@@ -274,88 +161,22 @@ public class AuditLog extends BaseProtectedEntity implements Serializable,
 		fields.add("entityClass");
 		fields.add("entityId");
 		fields.add("reference");
-		fields.add("ownerOffice");
-		fields.add("updateDate");
 		return fields;
 	}
 
-    /**
-     * Getter of reference id.
-     * 
-     * @return the referenceId
-     */
-    public final String getReference() {
-        return this.reference;
-    }
-
-    /**
-     * Setter of reference id.
-     * 
-     * @param reference
-     *            the referenceId to set
-     */
-    protected final void setReference(final String reference) {
-        this.reference = reference;
-    }
-
-	public Date getStartDate() {
-		return startDate;
+	/**
+	 * @return the referenceId
+	 */
+	public final String getReference() {
+		return reference;
 	}
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	/**
+	 * @param referenceId
+	 *            the referenceId to set
+	 */
+	public final void setReference(String reference) {
+		this.reference = reference;
 	}
 
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public Boolean getOutOfOfficeHours() {
-		return outOfOfficeHours;
-	}
-
-	public void setOutOfOfficeHours(Boolean outOfOfficeHours) {
-		this.outOfOfficeHours = outOfOfficeHours;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	
-	public AuditLog getCopy(){
-		if (this == null){
-			return null;
-		}
-		
-		try {
-			return (AuditLog) clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public void setEntityName(String entityName) {
-		this.entityName = entityName;
-	}
-
-	public int getOfficeStartHour() {
-		return officeStartHour;
-	}
-
-	public void setOfficeStartHour(int officeStartHour) {
-		this.officeStartHour = officeStartHour;
-	}
-
-	public int getOfficeEndHour() {
-		return officeEndHour;
-	}
-
-	public void setOfficeEndHour(int officeEndHour) {
-		this.officeEndHour = officeEndHour;
-	}
 }

@@ -6,14 +6,10 @@
 
 <td colspan="4">
 <form:form commandName="usergroup" id="usergroup-form-${usergroup.id}" action="" cssClass="user">
-	<idy:form_title isNew="${usergroup.isNew}" formName="usergroup"/>
+	<idy:form_title isNew="${usergroup.isNew}" label="label.usergroup"/>
 	<div class="content">	
 		<spring:bind path="usergroup.*">
 		<c:if test="${status.error}">
-			<!-- this is a hack to crud.js to handle validation messages. -->
-			<c:if test="${usergroup.isNew}">
-			<!-- <tr id="usergroup-row-new"> -->
-			</c:if>			
 			<div class='errorBox'>
 				<form:errors path="*" />
             </div>

@@ -21,7 +21,6 @@
             </div> 
             
             <div class="contents">
-            	<p><a href="usergroup-matrix.jspx"> View Permission Matrix </a> </p>
             	<table class="admin-table">
             		<thead>
             		<tr>

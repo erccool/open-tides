@@ -1,22 +1,11 @@
-/*
-   Licensed to the Apache Software Foundation (ASF) under one
-   or more contributor license agreements.  See the NOTICE file
-   distributed with this work for additional information
-   regarding copyright ownership.  The ASF licenses this file
-   to you under the Apache License, Version 2.0 (the
-   "License"); you may not use this file except in compliance
-   with the License.  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an
-   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   KIND, either express or implied.  See the License for the
-   specific language governing permissions and limitations
-   under the License.    
+/**
+ * 
+ * This source code is property of Ideyatech, Inc.
+ * All rights reserved. 
+ * 
+ * AcegiAjaxFilter.java
+ * Created on Feb 13, 2008, 10:17:04 AM
  */
-
 package org.opentides.filter;
 
 import java.io.IOException;
@@ -42,23 +31,17 @@ public class AcegiAjaxFilter extends OncePerRequestFilter {
 	@Override	 
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response, 
-                                    FilterChain filterChain) throws ServletException, IOException {	
-		
-		if (!isAjaxRequest(request)) {
-			filterChain.doFilter(request, response);
-        	if(request.getSession().getAttribute(AbstractProcessingFilter.ACEGI_SECURITY_LAST_EXCEPTION_KEY) != null)
-        	{
-        		String errorMessage = ((AuthenticationException) request.
-                        getSession().getAttribute(AbstractProcessingFilter.ACEGI_SECURITY_LAST_EXCEPTION_KEY)).getMessage();
-        		request.getSession().setAttribute("otherLoginIssues", errorMessage);
-        	}
-        	return;
+                                    FilterChain filterChain) throws ServletException, IOException {
+ 
+        if (!isAjaxRequest(request)) {
+            filterChain.doFilter(request, response);
+            return;
         }
-		        
+ 
         RedirectResponseWrapper redirectResponseWrapper = new RedirectResponseWrapper(response);
-        
+ 
         filterChain.doFilter(request, redirectResponseWrapper);
-        
+ 
         if (redirectResponseWrapper.getRedirect() != null) {
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/plain;charset=utf-8");
@@ -73,10 +56,8 @@ public class AcegiAjaxFilter extends OncePerRequestFilter {
             if (redirectURL.indexOf("login_error=1") == -1) {
                 content = "url:" + redirectURL;
             } else {
-                content = "error:"; 
-                String errorMessage = ((AuthenticationException) request.
+                content = "error:" + ((AuthenticationException) request.
                                     getSession().getAttribute(AbstractProcessingFilter.ACEGI_SECURITY_LAST_EXCEPTION_KEY)).getMessage();
-                content += errorMessage;
             }
             response.getOutputStream().write(content.getBytes("UTF-8"));
         }

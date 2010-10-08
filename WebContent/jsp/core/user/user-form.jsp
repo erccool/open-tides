@@ -6,14 +6,10 @@
 
 <td colspan="5">
 <form:form id="user-form-${user.id}" commandName="user" action="" cssClass="user">
-	<idy:form_title isNew="${user.isNew}" formName="user"/>
+	<idy:form_title isNew="${user.isNew}" label="label.user"/>
 	<div class="content">	
 		<spring:bind path="user.*">
 		<c:if test="${status.error}">
-			<!-- this is a hack to crud.js to handle validation messages. -->
-			<c:if test="${user.isNew}">
-			<!-- <tr id="user-row-new"> -->
-			</c:if>		
 			<div class='errorBox'>
 				<form:errors path="*" />
             </div>
@@ -25,19 +21,12 @@
 			<form:input path="lastName" size="40" maxlength="100" /> <sup class="required">*</sup></p>	
 		<p> <label for="emailAddress"><spring:message code="label.email-address" /> </label>
 			<form:input path="emailAddress" size="40" maxlength="100" /> <sup class="required">*</sup></p>
-		<p> <label for="office"><spring:message code="label.office" /> </label>
-            <form:select path="office">
-                <form:option value=""></form:option>
-	        	<form:options items="${officeList}" itemValue="id" itemLabel="value" />
-			</form:select></p>
 		<p> <label for="username"><spring:message code="label.username" /> </label>
 			<form:input path="credential.username" size="40" maxlength="100" /> <sup class="required">*</sup></p>
-		<p> <label for="password"><spring:message code="label.new-password" /> </label>
-			<form:password path="credential.newPassword" size="40" maxlength="100" /> 
-			<c:if test="${user.isNew}"><sup class="required">*</sup></c:if></p>
+		<p> <label for="password"><spring:message code="label.password" /> </label>
+			<form:password path="credential.password" size="40" maxlength="100" /> <sup class="required">*</sup></p>
 		<p> <label for="confirm-password"><spring:message code="label.confirm-password" /> </label>
-			<form:password path="credential.confirmPassword" size="40" maxlength="100" />
-			<c:if test="${user.isNew}"><sup class="required">*</sup></c:if></p>
+			<form:password path="credential.confirmPassword" size="40" maxlength="100" /> <sup class="required">*</sup></p>		
 		<p>	<label for="groups"><spring:message code="label.usergroups" /></label>
 			<c:if test="${groups != null}">
 				<form:select path="groups" size="4" multiple="true">  					
@@ -48,11 +37,6 @@
 				<spring:message code="msg.no-existing-usergroups" />				
 			</c:if>
 		</p>
-		<p>                                       	                                    	                                  	                                            
-        	<label>&nbsp;</label>
-        	<form:checkbox path="credential.enabled" cssClass="checkbox" label="Enable User"></form:checkbox>
-       	</p>
-		
 		<p>
 			<label for="buttons">&nbsp;</label>	
 		  	<idy:submit_button id="${user.id}" page="admin/people.jspx" formName="user-form-${user.id}" prefix="user"/>

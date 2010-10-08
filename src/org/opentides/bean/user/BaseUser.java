@@ -1,22 +1,11 @@
-/*
-   Licensed to the Apache Software Foundation (ASF) under one
-   or more contributor license agreements.  See the NOTICE file
-   distributed with this work for additional information
-   regarding copyright ownership.  The ASF licenses this file
-   to you under the Apache License, Version 2.0 (the
-   "License"); you may not use this file except in compliance
-   with the License.  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an
-   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   KIND, either express or implied.  See the License for the
-   specific language governing permissions and limitations
-   under the License.    
+/**
+ * 
+ * This source code is property of Ideyatech, Inc.
+ * All rights reserved. 
+ * 
+ * BaseUser.java
+ * Created on Feb 13, 2008, 9:54:37 PM
  */
-
 package org.opentides.bean.user;
 
 import java.util.ArrayList;
@@ -33,26 +22,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.opentides.bean.BaseCriteria;
-import org.opentides.bean.BaseProtectedEntity;
-import org.opentides.bean.SystemCodes;
+import org.opentides.bean.BaseEntity;
+
+
 
 @Entity
 @Table(name = "USER_PROFILE")
-public class BaseUser extends BaseProtectedEntity implements BaseCriteria {
+public class BaseUser extends BaseEntity implements BaseCriteria {
 
 	private static final long serialVersionUID = 7634675501487373408L;
-	
-	/**
-	 * Category name referenced by SystemCodes
-	 */
-	public static final String CATEGORY_OFFICE="OFFICE";
 
 	@Column(name = "FIRSTNAME")
 	private String firstName;
@@ -63,12 +47,8 @@ public class BaseUser extends BaseProtectedEntity implements BaseCriteria {
 	@Column(name = "MIDDLENAME", nullable=true)
 	private String middleName;
 
-	@Column(name = "EMAIL", unique=true)
+	@Column(name = "EMAIL", unique = true)
 	private String emailAddress;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "OFFICE", nullable=true, referencedColumnName="KEY_")
-	private SystemCodes office;
 
 	/*
 	 * Lob Annotation Specifies that a persistent property or field should be
@@ -88,32 +68,6 @@ public class BaseUser extends BaseProtectedEntity implements BaseCriteria {
 	@Column(name = "LASTLOGIN")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastLogin;
-	
-	public BaseUser() {
-		super();
-		this.setCredential(new UserCredential());
-		groups = new HashSet<UserGroup>();
-	}
-
-	/**
-	 * Creates a clone of this object containing basic information including the following:
-	 * firstName, lastName, middleName, emailAddress, lastLogin, and image.
-	 * This function is used to populate the user object associated to AuditLog.
-	 * 
-	 * Note: groups and credentials are not cloned.
-	 * @param clone
-	 * @return
-	 */
-	public BaseUser cloneUserProfile() {
-		BaseUser clone = new BaseUser();
-		clone.firstName    = this.firstName;
-		clone.lastName     = this.lastName;
-		clone.middleName   = this.middleName;
-		clone.emailAddress = this.emailAddress;
-		clone.image        = this.image;
-		clone.lastLogin    = this.lastLogin;
-		return clone;
-	}
 
 	public void addGroup(UserGroup group) {
 		if (group == null)
@@ -130,6 +84,11 @@ public class BaseUser extends BaseProtectedEntity implements BaseCriteria {
 			groups.remove(group);
 	}
 
+	public BaseUser() {
+		super();
+		this.setCredential(new UserCredential());
+		groups = new HashSet<UserGroup>();
+	}
 
 	public String getEmailAddress() {
 		return emailAddress;
@@ -181,19 +140,7 @@ public class BaseUser extends BaseProtectedEntity implements BaseCriteria {
 		props.add("firstName");
 		props.add("lastName");
 		props.add("emailAddress");
-		props.add("office");
 		return props;
-	}
-	
-	public boolean hasPermission(String permission) {
-		for (UserGroup group : groups) {
-			for (UserRole userRole : group.getRoles()) {
-				if (permission.equals(userRole.getRole())) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 	/**
@@ -241,21 +188,7 @@ public class BaseUser extends BaseProtectedEntity implements BaseCriteria {
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
 	}
-
-	/**
-	 * @return the office
-	 */
-	public SystemCodes getOffice() {
-		return office;
-	}
-
-	/**
-	 * @param office the office to set
-	 */
-	public void setOffice(SystemCodes office) {
-		this.office = office;
-	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -280,11 +213,6 @@ public class BaseUser extends BaseProtectedEntity implements BaseCriteria {
 		} else if (!emailAddress.equals(other.emailAddress))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return this.lastName + ", " + this.firstName;
 	}
 
 }

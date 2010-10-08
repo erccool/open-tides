@@ -1,30 +1,8 @@
-/*
-   Licensed to the Apache Software Foundation (ASF) under one
-   or more contributor license agreements.  See the NOTICE file
-   distributed with this work for additional information
-   regarding copyright ownership.  The ASF licenses this file
-   to you under the Apache License, Version 2.0 (the
-   "License"); you may not use this file except in compliance
-   with the License.  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an
-   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   KIND, either express or implied.  See the License for the
-   specific language governing permissions and limitations
-   under the License.    
- */
-
 package org.opentides.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 public class DateUtil {
 	
@@ -104,18 +82,4 @@ public class DateUtil {
     	return false;
     }
     
-    /**
-	 * Get current date according to client's time zone.
-	 * @param calendar - adapting calendar
-	 * @param timeZone - client time zone
-	 * @return adapt calendar to client time zone
-	 */
-	public static Date getClientCurrentDate(final Calendar calendar, final TimeZone timeZone) {
-	    Calendar result = new GregorianCalendar(timeZone);
-	    result.setTimeInMillis(calendar.getTimeInMillis() +
-	            timeZone.getOffset(calendar.getTimeInMillis()) -
-	            TimeZone.getDefault().getOffset(calendar.getTimeInMillis()));
-	    result.getTime();
-	    return result.getTime();
-	}
 }
