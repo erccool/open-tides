@@ -18,6 +18,6 @@
 </tr>
 <script language="javascript">
 IDEYATECH.crud.cancelNew('lookup-');
-IDEYATECH.crud.refreshTable('lookup-table-results', {})
+IDEYATECH.crud.refreshTable('lookup-table-results')
 </script>
 </c:if>

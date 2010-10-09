@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+           
+<!-- Property File Configuration -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+		 		<value>classpath:resources/tides.properties</value>
+		 		<value>classpath:resources/ideyatech.properties</value>
+		 	</list>
+		</property>		
+	</bean>	
+
+<!--  Define dataSource as JNDI -->
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>java:comp/env/jdbc/ideyatech</value>
+		</property>
+	</bean>
+<!--  
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost/ot-sample"/>
+		<property name="username" value="opentides"/>
+		<property name="password" value="free"/>
+	</bean>
+ -->
+ 
+	<bean id="daoAuthenticationProvider" class="org.acegisecurity.providers.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService"><ref bean="authenticationService"/></property>
+      <!-- 
+      <property name="passwordEncoder"><ref local="passwordEncoder"/></property>
+       -->
+    </bean>
+</beans>

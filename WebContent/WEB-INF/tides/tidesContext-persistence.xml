@@ -14,7 +14,7 @@
            	<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
         </property>
 		<property name="persistenceUnitName">
-			<value>opentides</value>
+			<value>hibernateConfig</value>
 		</property>
 	</bean> 
      
@@ -24,6 +24,20 @@
 	
 	<!-- enable the configuration of transactional behavior based on annotations -->
 	<tx:annotation-driven />
+    
+    <!-- Hibernate Utility Option using ideyatech.properties
+	<bean id="hibernateUtil" class="com.ideyatech.core.util.HibernateUtil">
+		<property name="driverClass" value="${database.driver}" />
+		<property name="url" value="${database.url}" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+	</bean>	
+    -->
+
+    <!-- Hibernate Utility -->
+	<bean id="hibernateUtil" class="org.opentides.util.HibernateUtil" init-method="initialize">
+		<property name="jndiPath" value="${database.jndi}" />
+	</bean>	
     
 	<!--  Property file containing custom JPQL queries -->
 	<bean id="jpqlProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
@@ -48,7 +62,7 @@
 			<ref bean="jpqlProperties" />
 		</property>
 		<property name="securityFilter">
-			<ref bean="defaultSecurityFilterMap" />
+			<ref bean="securityFilterMap" />
 		</property>
 	</bean>
 	
@@ -59,25 +73,4 @@
 			<ref bean="evolveList" />
 		</property>
 	</bean>
-	
-	<bean id="defaultSecurityFilterMap" class="org.springframework.beans.factory.config.MapFactoryBean">
-		<property name="sourceMap">	
-			<map>
-				<entry key="ACCESS_ALL"><value>1=1</value></entry>
-				<entry key="ACCESS_OFFICE"><value>(obj.ownerOffice = :office.key OR obj.ownerOffice is null OR obj.ownerOffice='')</value></entry>
-				<entry key="ACCESS_OWNER"><value>(obj.owner=:credential.username OR obj.owner is null)</value></entry>
-			</map>
-		</property>
-	</bean>
-	
-	<bean id="baseUserSecurityFilterMap" class="org.springframework.beans.factory.config.MapFactoryBean">
-		<property name="sourceMap">	
-			<map>
-				<entry key="ACCESS_ALL"><value>1=1</value></entry>
-				<entry key="ACCESS_OFFICE"><value>obj.office.key = :office.key</value></entry>
-				<entry key="ACCESS_OWNER"><value>obj.owner=:credential.username</value></entry>
-			</map>
-		</property>
-	</bean>
-
 </beans>

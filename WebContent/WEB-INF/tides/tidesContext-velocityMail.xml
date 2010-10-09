@@ -6,8 +6,8 @@
 	<!--  VELOCITY ENGINE -->
 	<bean id="velocityEngine"
 		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
-		<property name="resourceLoaderPath" value="/WEB-INF/template/"/>	
-		<!-- 	
+		<property name="resourceLoaderPath" value="/WEB-INF/template/"/>
+		<!-- 
 		<property name="configLocation"><value>classpath:resources/velocity.properties</value></property>
 		<property name="velocityProperties">
 			<props>
@@ -16,8 +16,7 @@
 					org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
 				</prop>
 			</props>
-		</property>
-		 --> 
+		</property> -->
 	</bean>
 		
 	<!-- MAIL SENDER -->
@@ -32,9 +31,6 @@
 		<property name="password">
 			<value>${mail.server.password}</value>
 		</property>
-		<property name="port">
-			<value>${mail.server.port}</value>
-		</property>
 		<property name="javaMailProperties">
         	<props>
 	  			<prop key="mail.smtp.auth">true</prop>
@@ -44,7 +40,7 @@
   		</property>
 	</bean>
 	
-	<bean id="mailingContext" class="org.opentides.mail.MailingContext" autowire="byName">
+	<bean id="mailingUtil" class="org.opentides.util.MailingUtil" autowire="byName">
 		<property name="mailSender" ref="mailSender" />
 		<property name="velocityEngine" ref="velocityEngine" />
 	</bean>	

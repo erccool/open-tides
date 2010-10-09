@@ -11,19 +11,10 @@
 		<property name="dao" ref="auditLogDAO"/>
 	</bean>
 	
-	<bean id="systemCodesService" class="org.opentides.service.impl.SystemCodesServiceImpl" autowire="byName">
-		<property name="dao" ref="systemCodesDAO" />
+	<bean id="systemCodesService" class="org.opentides.service.impl.SystemCodesServiceImpl">
+		<property name="dao" ref="systemCodesDAO"/>
 	</bean>
-
-	<bean id="widgetService" class="org.opentides.service.impl.WidgetServiceImpl">
-		<property name="dao" ref="widgetDAO"/>
-		<property name="widgetColumn" value="${widget.column}" />
-	</bean>
-
-	<bean id="userWidgetsService" class="org.opentides.service.impl.UserWidgetsServiceImpl" autowire="byName">
-		<property name="dao" ref="userWidgetsDAO"/>
-	</bean>
-
+	
 	<bean id="fileInfoService" class="org.opentides.service.impl.FileInfoServiceImpl">
 		<property name="dao" ref="fileInfoDAO"/>
 	</bean>
@@ -36,13 +27,7 @@
 		</property>
 	</bean>
 	
-	<bean id="reportService" class="org.opentides.service.impl.ReportServiceImpl" autowire="byName">
-		<property name="dao" ref="reportDAO"/>
-		<property name="dataSource" ref="reportDataSource" />
-		<property name="jasperPath" value="${jasper.dir}" />
-	</bean>
-	
-	<bean id="resetPasswordMailMessage" class="org.opentides.bean.MailMessage">
+	<bean id="resetPasswordMailMessage" class="org.opentides.mail.MailMessage">
 		<property name="msgFrom" value="${reset.password.from_email}"/>
 	</bean> 
 	
