@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+  	<!-- System Category Definition -->
+	<bean id="systemCategory" class="com.ideyatech.core.bean.VeeSystemCategory"
+		factory-method="createInstance" />  
+		
+	<bean id="daoAuthenticationProvider" class="org.acegisecurity.providers.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService"><ref bean="authenticationService"/></property>
+      <!-- 
+      <property name="passwordEncoder"><ref local="passwordEncoder"/></property>
+       -->
+    </bean>
+    
+    <!-- List of user permissions -->
+	<bean id="rolesMap" class="org.springframework.beans.factory.config.MapFactoryBean">
+		<property name="sourceMap">	
+			<map>
+				<entry key="ROLE_ADMIN"><value>Administrator</value></entry>
+				<entry key="ROLE_GUEST"><value>Guest</value></entry>
+			</map>
+		</property>
+	</bean>
+    
+   <!-- Note the order that entries are placed against the objectDefinitionSource is critical.
+        The FilterSecurityInterceptor will work from the top of the list down to the FIRST pattern that matches the request URL.
+        Accordingly, you should place MOST SPECIFIC (ie a/b/c/d.*) expressions first, with LEAST SPECIFIC (ie a/.*) expressions last -->
+   	<bean id="filterInvocationInterceptor" class="org.acegisecurity.intercept.web.FilterSecurityInterceptor">
+      <property name="authenticationManager"><ref bean="authenticationManager"/></property>
+      <property name="accessDecisionManager"><ref bean="httpRequestAccessDecisionManager"/></property>
+      <property name="objectDefinitionSource">
+         <value>
+			    CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+			    PATTERN_TYPE_APACHE_ANT
+				/admin/**=ROLE_ADMIN
+				/**=ROLE_ANONYMOUS,ROLE_GUEST,ROLE_ADMIN
+         </value>
+      </property>
+   	</bean>
+</beans>
