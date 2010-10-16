@@ -90,7 +90,7 @@ public class FileUtil {
 			String line = null;
 			StringBuffer ret = new StringBuffer();
 			while ((line = reader.readLine()) != null) {
-				ret.append(line);
+				ret.append(line + "\n");
 			}
 			return ret.toString();
 		} catch (NullPointerException npe) {
