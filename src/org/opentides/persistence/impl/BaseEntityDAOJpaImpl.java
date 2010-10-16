@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -215,8 +216,12 @@ public class BaseEntityDAOJpaImpl<T extends BaseEntity,ID extends Serializable>
 		if (params != null) {
 			for (Map.Entry<String, Object> entry:params.entrySet())
 				queryObject.setParameter(entry.getKey(), entry.getValue());
+		} 
+		try {
+		    return (T) queryObject.getSingleResult();
+		} catch (NoResultException nre) {
+		    return null;		    
 		}
-		return (T) queryObject.getSingleResult();
 	}
 
     public final Class<T> getEntityBeanType() {
