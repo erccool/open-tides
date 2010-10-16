@@ -6,11 +6,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
- <% response.setHeader("Cache-Control","no-cache"); //HTTP 1.1 
+<%  
+ 	 response.setHeader("Cache-Control","no-cache"); //HTTP 1.1 
      response.setHeader("Pragma","no-cache"); //HTTP 1.0 
      response.setDateHeader ("Expires", 0); //prevents caching 
-     response.setHeader("Cache-Control","no-store"); //HTTP 1.1 %>
-
+     response.setHeader("Cache-Control","no-store"); //HTTP 1.1 
+%>
 <%
 int widgetConfigMinimize = WidgetConfiguration.WIDGET_STATUS_MINIMIZE;
 pageContext.setAttribute("widgetConfigMinimize",widgetConfigMinimize);
@@ -18,6 +19,7 @@ int widgetConfigShow = WidgetConfiguration.WIDGET_STATUS_SHOW;
 pageContext.setAttribute("widgetConfigShow",widgetConfigShow);
 %>
 
+<%@page import="org.opentides.util.UrlUtil"%>
 <%@page import="org.opentides.util.StringUtil"%>
 <c:set var="columnClassName" value="dashboard-column" scope="page" />
 <c:set var="widgetClassName" value="widget-box" scope="page" />
@@ -31,9 +33,9 @@ pageContext.setAttribute("widgetConfigShow",widgetConfigShow);
 							<c:set var="urlNoCache" value="${userWidget.widget.url}" scope="page" />
 							<%
 							String urlSrc = (String)pageContext.getAttribute("urlNoCache");
-							String widgetCSS = StringUtil.getURLParam(urlSrc,"widgetCSSName");
+							String widgetCSS = UrlUtil.getURLParam(urlSrc,"widgetCSSName");
 							pageContext.setAttribute("widgetCSS",widgetCSS);
-							String hasToEval = StringUtil.getURLParam(urlSrc,"hasToEval");
+							String hasToEval = UrlUtil.getURLParam(urlSrc,"hasToEval");
 							if (StringUtil.isEmpty(hasToEval)) {
 								hasToEval="0";
 							}
