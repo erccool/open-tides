@@ -22,7 +22,7 @@
 		</spring:bind>
 		<div class="fieldsBox">
     	<p id="categorySelector"> <label for="category"><spring:message code="label.category" /></label>
-    		<select id="categorySelect" name="category" onclick="javascript:checkNewCategory(true);">
+    		<select id="categorySelect" name="category" onchange="javascript:checkNewCategory(true);">
     			<option value="0">Select a Category</option>
             	<option value="0">-- New Category --</option>
 			<c:forEach items="${categories}" var="record" varStatus="status">
