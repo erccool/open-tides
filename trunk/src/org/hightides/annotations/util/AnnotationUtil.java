@@ -101,7 +101,7 @@ public final class AnnotationUtil {
                         .error("Unable to find annotation attribute searchable for field ["
                                 + field.getName()
                                 + "] in annotation ["
-                                + annotation.toString() + "]");
+                                + annotation.toString() + "]",e);
             }
         }
         return false;
@@ -143,7 +143,7 @@ public final class AnnotationUtil {
                             .error("Unable to find annotation attribute titleField for field ["
                                     + field.getName()
                                     + "] in annotation ["
-                                    + annotation.toString() + "]");
+                                    + annotation.toString() + "]",e);
                 }
             }
         }
