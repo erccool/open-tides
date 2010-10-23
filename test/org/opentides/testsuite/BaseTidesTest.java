@@ -20,6 +20,7 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.test.jpa.AbstractJpaTests;
 
@@ -92,5 +93,10 @@ public class BaseTidesTest extends AbstractJpaTests {
         } else {
             System.out.println("No initial test data loaded.");
         }
+    }
+    
+    @Test
+    public void emptyTest() {
+    	// this is just to avoid JUnit warning
     }
 }
