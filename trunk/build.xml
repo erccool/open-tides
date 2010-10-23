@@ -22,6 +22,18 @@
 		<pathelement path="${web.dir}/WEB-INF/" />
 	</path>
 	
+	<path id="test-classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${build-lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement path="${build.dir}" />
+		<pathelement path="${test.dir}" />
+		<pathelement path="${web.dir}/WEB-INF/" />
+	</path>
+
 	<target name="usage">
 		<echo message="" />
 		<echo message="${name} build file" />
@@ -120,14 +132,14 @@
 		<mkdir dir="${build.dir}" />
 		<javac destdir="${build.dir}" debug="true" deprecation="false" optimize="false" failonerror="true">
 			<src path="${test.dir}" />
-			<classpath refid="build-classpath" />
+			<classpath refid="test-classpath" />
 		</javac>
 	</target>
 	
 	<target name="run-test" depends="build,build-test" description="Runs all Junit test scripts">
 		<mkdir dir="${junit.reports.dir}" />
 		<junit printsummary="yes" fork="yes" haltonfailure="no">
-			<classpath refid="build-classpath" />
+			<classpath refid="test-classpath" />
 			<formatter type="plain" />
 			<batchtest fork="yes" todir="${junit.reports.dir}">
 				<fileset dir="${test.dir}">
