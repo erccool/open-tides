@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.jar.JarEntry;
 
 import org.apache.log4j.Logger;
+import org.opentides.InvalidImplementationException;
 
 /**
  * Helper class for high-tides in generating package and folder paths.
@@ -95,7 +96,11 @@ public class PackageUtil {
 		try {
 			String outputPackage;
 			outputPackage = outputFile.getParentFile().getCanonicalPath().replaceAll("\\\\", "/");
-			int index = outputPackage.indexOf(baseOutputPath) + baseOutputPath.length();
+			int index = outputPackage.indexOf(baseOutputPath);
+			if (index<0)
+				throw new InvalidImplementationException("Unable to retrieve package. BaseOutputPath ["
+						+baseOutputPath+"] is invalid.");
+			index += baseOutputPath.length();
 			String packagePath = outputPackage.substring(index);
 			return packagePath.replaceAll("/", "\\.");		
 		} catch (IOException e) {
