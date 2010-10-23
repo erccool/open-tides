@@ -14,7 +14,7 @@
            	<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
         </property>
 		<property name="persistenceUnitName">
-			<value>opentides</value>
+			<value>hibernateConfig</value>
 		</property>
 	</bean> 
      
