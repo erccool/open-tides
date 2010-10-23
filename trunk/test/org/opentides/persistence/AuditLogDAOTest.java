@@ -2,16 +2,7 @@ package org.opentides.persistence;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.acegisecurity.GrantedAuthority;
-import org.acegisecurity.GrantedAuthorityImpl;
-import org.acegisecurity.context.SecurityContextHolder;
-import org.acegisecurity.context.SecurityContextImpl;
-import org.acegisecurity.providers.ProviderManager;
-import org.acegisecurity.providers.TestingAuthenticationProvider;
-import org.acegisecurity.providers.TestingAuthenticationToken;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.opentides.bean.SystemCodes;
@@ -22,7 +13,6 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 public class AuditLogDAOTest extends BaseTidesTest {
 	private static final Logger _log = Logger.getLogger(AuditLogDAOTest.class);
-	private ProviderManager authenticationManager;
 	
 	public AuditLogDAOTest() {
 		super();
@@ -56,19 +46,4 @@ public class AuditLogDAOTest extends BaseTidesTest {
 		assertEquals(prevCount+1, currCount);
 	}
 	
-	private void setupSessionUser(){
-		TestingAuthenticationToken token = new TestingAuthenticationToken("admin", "admin", 
-				new GrantedAuthority[]{
-					new GrantedAuthorityImpl("User"),
-					new GrantedAuthorityImpl("Administrator")
-			});
-			
-			List<TestingAuthenticationProvider> list = new ArrayList<TestingAuthenticationProvider>();
-			list.add(new TestingAuthenticationProvider());
-			authenticationManager.setProviders(list);
-			
-			SecurityContextImpl context = new SecurityContextImpl();
-			context.setAuthentication(token);
-			SecurityContextHolder.setContext(context);
-	}
 }
