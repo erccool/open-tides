@@ -13,6 +13,6 @@ public class CodeUtilTest {
 	public void testHashCodes() {
 		File testFile = new File("test/resources/hashcode.txt");
 		CodeUtil.updateHashCode(testFile, "junit.test");
-		Assert.assertEquals("tvtXoq2NluYx6fJlAwk+TA==", CodeUtil.getHashCode("junit.test"));
+		Assert.assertEquals("uNSG3EEar4wmT8GrOiAUTA==", CodeUtil.getHashCode("junit.test"));
 	}
 }
