@@ -44,7 +44,7 @@ public class HibernateUtil {
     /**
      * Database driver class name (e.g. com.mysql.jdbc.Driver)
      */
-    private static String driverClass;
+    private static String driverClassName;
 
     /**
      * Database connection url (e.g. jdbc:mysql://localhost/javatest)
@@ -81,7 +81,7 @@ public class HibernateUtil {
         	Properties properties = XMLPersistenceUtil.getProperties("META-INF/persistence.xml", "hibernateConfig");
         	ac.setProperties(properties);
         	if (StringUtil.isEmpty(jndiPath)) {
-	            ac.setProperty("hibernate.connection.driver_class", driverClass);
+	            ac.setProperty("hibernate.connection.driver_class", driverClassName);
 	            ac.setProperty("hibernate.connection.url", url);
 	            ac.setProperty("hibernate.connection.username", username);
 	            ac.setProperty("hibernate.connection.password", password);
@@ -108,8 +108,8 @@ public class HibernateUtil {
 	/**
 	 * @param driverClass the driverClass to set
 	 */
-	public void setDriverClass(String driverClass) {
-		HibernateUtil.driverClass = driverClass;
+	public void setDriverClassName(String driverClass) {
+		HibernateUtil.driverClassName = driverClass;
 	}
 
 	/**
