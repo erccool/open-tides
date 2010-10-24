@@ -375,7 +375,6 @@ public class FileUtil {
 	 * @return
 	 */
 	public static String getMD5sum(File file) {
-		
 		String md5sum = null;
 		try {
 			InputStream inputStream = new FileInputStream(file);			
