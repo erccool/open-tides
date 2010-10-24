@@ -9,13 +9,16 @@
 package org.opentides.util;
 
 
+import java.lang.reflect.Field;
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
 import org.opentides.InvalidImplementationException;
+import org.opentides.bean.BaseEntity;
 import org.opentides.bean.SystemCodes;
 import org.opentides.bean.user.UserCredential;
-import org.opentides.util.CrudUtil;
 
 import com.ideyatech.core.bean.TestCodes;
 import com.ideyatech.core.bean.UserCriteria;
@@ -242,5 +245,18 @@ public class CrudUtilTest {
 		Assert.assertEquals(" System Codes", CrudUtil
 				.getReadableName("org.opentides.bean.SystemCodes"));
     }
+    
+	@Test
+	public void testGetAllFields() throws SecurityException, NoSuchFieldException {
+		List<Field> fields = CrudUtil.getAllFields(TestCodes.class);
+		Assert.assertEquals(20, fields.size());
+		Field keyField = TestCodes.class.getDeclaredField("key");
+		Field statusField = TestCodes.class.getDeclaredField("status");
+		Field createDateField = BaseEntity.class.getDeclaredField("createDate");
+		Assert.assertTrue(fields.contains(keyField));
+		Assert.assertTrue(fields.contains(statusField));
+		Assert.assertTrue(fields.contains(createDateField));
+	}
+
 }
 
