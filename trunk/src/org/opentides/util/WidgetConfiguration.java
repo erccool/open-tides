@@ -29,7 +29,7 @@ package org.opentides.util;
 public final class WidgetConfiguration {
 
 	// not shown
-	public static final int WIDGET_STATUS_REMOVE      = 0;
+	public static final int WIDGET_STATUS_REMOVE    = 0;
 	// shown
 	public static final int WIDGET_STATUS_SHOW      = 1;
 	// minimized

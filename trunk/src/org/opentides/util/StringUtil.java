@@ -119,7 +119,11 @@ public class StringUtil {
 	 * @throws NoSuchAlgorithmException
 	 * reference http://java.sun.com/j2se/1.4.2/docs/api/java/security/MessageDigest.html
 	 */
-	public static String getEncryptedPassword(String clearTextPassword)	 {		
+	public static String getEncryptedPassword(String clearTextPassword)	 {	
+		// handler for empty string
+		if (StringUtil.isEmpty(clearTextPassword))
+			return"";
+		
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
 			md.update(clearTextPassword.getBytes());
