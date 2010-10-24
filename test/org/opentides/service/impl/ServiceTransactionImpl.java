@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ServiceTransactionImpl extends BaseCrudServiceImpl<SystemCodes>
 	implements ServiceTransaction {
 
-	@Transactional(rollbackFor=RuntimeException.class)
+	@Transactional
 	public void saveWithException(SystemCodes obj) {
 		getDao().saveEntityModel(obj);
 		throw new RuntimeException("Forced runtime exception for unit test.");
