@@ -12,7 +12,6 @@ package org.opentides.util;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.opentides.util.StringUtil;
 
 
 /**
@@ -76,5 +75,34 @@ public class StringUtilTest {
         Assert.assertEquals(-1.2, StringUtil.convertToDouble("abc", -1.2));
         Assert.assertEquals(0.0, StringUtil.convertToDouble("0", -1));
         Assert.assertEquals(32.1, StringUtil.convertToDouble("032.1", -1));
+    }
+    
+    @Test
+    public final void testGetEncryptedPassword() {
+    	Assert.assertEquals("+JWAOqbF4Q2BpAxzpG9AaZd/psc7eWiEVVbpjZDyj/Y=", StringUtil.getEncryptedPassword("ideyatech"));
+    	Assert.assertEquals("GYxzUrSNqswso7ddHvxj+kG8wy8YAfQ4dFi7Y4GTSwQ=", StringUtil.getEncryptedPassword("sample_password"));
+    	Assert.assertEquals("", StringUtil.getEncryptedPassword(null));
+    	Assert.assertEquals("", StringUtil.getEncryptedPassword(""));
+    }
+    
+    @Test
+    public final void testParseCsvLine() {
+    	String line1 = "1,\"Lion's Lair\",September,";
+    	String line2 = "2,Test Word,\"September 15, 1990\",End";
+    	String line3 = "";
+    	String[] str1 = StringUtil.parseCsvLine(line1);
+    	String[] str2 = StringUtil.parseCsvLine(line2);
+    	String[] str3 = StringUtil.parseCsvLine(line3);
+    	Assert.assertEquals("1", str1[0]);
+    	Assert.assertEquals("Lion's Lair", str1[1]);
+    	Assert.assertEquals("September", str1[2]);
+    	Assert.assertEquals("", str1[3]);
+        	
+    	Assert.assertEquals("2", str2[0]);
+    	Assert.assertEquals("Test Word", str2[1]);
+    	Assert.assertEquals("September 15, 1990", str2[2]);
+    	Assert.assertEquals("End", str2[3]);
+    	
+       	Assert.assertEquals("", str3[0]);
     }
 }

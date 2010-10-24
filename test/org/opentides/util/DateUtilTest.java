@@ -71,8 +71,10 @@ public class DateUtilTest {
     public void testConvertShortDate() throws ParseException{
     	Assert.assertEquals(mar_16_1989,DateUtil.convertShortDate("19890316"));
     	Assert.assertEquals(jun_30_1932,DateUtil.convertShortDate("19320630"));
-    	Assert.assertEquals("19320630",DateUtil.convertShortDate(jun_30_1932));
-    	Assert.assertEquals("19890316",DateUtil.convertShortDate(mar_16_1989));
+    	Assert.assertEquals("19320630", DateUtil.convertShortDate(jun_30_1932));
+    	Assert.assertEquals("19890316", DateUtil.convertShortDate(mar_16_1989));
+    	Assert.assertEquals(mar_16_1989,DateUtil.convertShortDate("invalid",mar_16_1989));
+    	Assert.assertEquals(jun_30_1932,DateUtil.convertShortDate("19320630",mar_16_1989));
     }
 
     @Test
@@ -134,5 +136,6 @@ public class DateUtilTest {
     	Assert.assertFalse(DateUtil.compareNullableDates(null, d2));
     	Assert.assertFalse(DateUtil.compareNullableDates(d1, null));    	
     }
+    
     
 }
