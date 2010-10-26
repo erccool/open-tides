@@ -10,6 +10,7 @@ package org.opentides.util;
 
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -240,6 +241,30 @@ public class CrudUtilTest {
     			CrudUtil.replaceSQLParameters("firstName=:firstName and credential.id=:credential.id", user));
     }
     
+    @Test 
+    public void testReplaceSQLParametersList() {
+    	UserCriteria user = new UserCriteria();
+    	UserCredential cred = new UserCredential();
+       	List<SystemCodes> favorites = new ArrayList<SystemCodes>();
+       	List<String> alias = new ArrayList<String>();
+       	favorites.add(new SystemCodes("FAVORITES","BANANA","Banana"));
+       	favorites.add(new SystemCodes("FAVORITES","MANGO","Mango"));
+       	alias.add("name1");
+       	alias.add("name2");
+    	user.setFirstName("Test");
+       	user.setEmailAddress("admin@ideyatech.com");
+       	user.setFavorites(favorites);
+       	user.setAlias(alias);
+      	cred.setUsername("testname");
+    	cred.setPassword("password");
+    	cred.setId(123l);
+    	cred.setEnabled(true);
+    	user.setCredential(cred);
+    	Assert.assertEquals("firstName='Test' and credential.id=123 and favorites in ( 'BANANA', 'MANGO' ) and alias in ( 'name1', 'name2' )", 
+    			CrudUtil.replaceSQLParameters("firstName=:firstName and credential.id=:credential.id " +
+    					"and favorites in ( :favorites ) and alias in ( :alias )", user));
+    }
+
     @Test
     public void testGetReadableName() {
 		Assert.assertEquals(" System Codes", CrudUtil
@@ -249,7 +274,7 @@ public class CrudUtilTest {
 	@Test
 	public void testGetAllFields() throws SecurityException, NoSuchFieldException {
 		List<Field> fields = CrudUtil.getAllFields(TestCodes.class);
-		Assert.assertEquals(20, fields.size());
+		Assert.assertEquals(22, fields.size());
 		Field keyField = TestCodes.class.getDeclaredField("key");
 		Field statusField = TestCodes.class.getDeclaredField("status");
 		Field createDateField = BaseEntity.class.getDeclaredField("createDate");
