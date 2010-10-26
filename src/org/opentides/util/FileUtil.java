@@ -52,12 +52,17 @@ public class FileUtil {
 	/**
 	 * Helper class to read certain file and return contents as string. 
 	 * 
+	 * Note: readFile() returns a newline at end of every line 
+	 * including the last line even when newline is not found on the 
+	 * original file.
+	 * 
 	 * @param file
 	 * @return
 	 */
 	public static String readFile(File file) {
 		try {
-			return readFile(new FileInputStream(file), file.getAbsolutePath());
+			InputStream is = FileUtil.getFileStream(file.getAbsolutePath());
+			return readFile(is, file.getAbsolutePath());
 		} catch (FileNotFoundException fe) {
 			String msg = "Failed to find file [" + file.getAbsolutePath() + "].";
 			_log.error(msg, fe);
@@ -66,19 +71,32 @@ public class FileUtil {
 	}
     
 	/**
-	 * Helper class to read certain file and return contents as string. The file
-	 * must be located relative to classpath.
+	 * Helper class to read certain file and return contents as string. 
+	 * 
+	 * Note: readFile() returns a newline at end of every line 
+	 * including the last line even when newline is not found on the 
+	 * original file.
 	 * 
 	 * @param filename
 	 * @return
 	 */
 	public static String readFile(String filename) {		
-		return readFile(FileUtil.class.getClassLoader()
-					.getResourceAsStream(filename), filename);
+		try {
+			InputStream is = FileUtil.getFileStream(filename);
+			return readFile(is, filename);
+		} catch (FileNotFoundException fe) {
+			String msg = "Failed to find file [" + filename + "].";
+			_log.error(msg, fe);
+			throw new InvalidImplementationException(msg, fe);
+		}
 	}
 		
 	/**
 	 * Helper class to read certain file from inputStream.
+	 * 
+	 * Note: readFile() returns a newline at end of every line 
+	 * including the last line even when newline is not found on the 
+	 * original file.
 	 * 
 	 * @param filename
 	 * @return
@@ -90,7 +108,7 @@ public class FileUtil {
 			String line = null;
 			StringBuffer ret = new StringBuffer();
 			while ((line = reader.readLine()) != null) {
-				ret.append(line + "\n");
+				ret.append(line + System.getProperty("line.separator"));
 			}
 			return ret.toString();
 		} catch (NullPointerException npe) {
@@ -123,7 +141,8 @@ public class FileUtil {
 	 */
 	public static byte[] readFileAsBytes(File file) {
 		try {
-			return readFileAsBytes(new FileInputStream(file), file.getAbsolutePath());
+			InputStream is = FileUtil.getFileStream(file.getAbsolutePath());
+			return readFileAsBytes(is, file.getAbsolutePath());
 		} catch (FileNotFoundException fe) {
 			String msg = "Failed to find file [" + file.getAbsolutePath() + "].";
 			_log.error(msg, fe);
@@ -139,8 +158,14 @@ public class FileUtil {
 	 * @return
 	 */
 	public static byte[] readFileAsBytes(String filename) {		
-		return readFileAsBytes(FileUtil.class.getClassLoader()
-					.getResourceAsStream(filename), filename);
+		try {
+			InputStream is = FileUtil.getFileStream(filename);
+			return readFileAsBytes(is, filename);
+		} catch (FileNotFoundException fe) {
+			String msg = "Failed to find file [" + filename + "].";
+			_log.error(msg, fe);
+			throw new InvalidImplementationException(msg, fe);
+		}
 	}
 
 	
@@ -189,31 +214,86 @@ public class FileUtil {
 	 * @return
 	 */
 	public static String backupFile(String filename) {
+		File source = new File(filename);
+		return FileUtil.backupFile(source);
+	}
+	
+	/**
+	 * Helper class to read certain file and return contents as string. The file
+	 * must be located relative to classpath.
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	public static String backupFile(File source) {
+		File backup = new File(source.getParent() + "/~" + source.getName());
 		try {
 			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(new FileInputStream(new File(filename))));
+					new InputStreamReader(new FileInputStream(source)));
 			BufferedWriter writer = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(new File(filename+"~"))));
+					new OutputStreamWriter(new FileOutputStream(backup)));
+			return FileUtil.backupFile(reader, writer, source.getAbsolutePath());
+		} catch (FileNotFoundException fe) {
+			String msg = "Failed to find file for backup [" + source.getAbsolutePath() + "].";
+			_log.error(msg, fe);
+			throw new InvalidImplementationException(msg, fe);
+		}
+	}
+	
+	/**
+	 * Helper class to read certain file and return contents as string. The file
+	 * must be located relative to classpath.
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	private static String backupFile(BufferedReader reader, 
+									 BufferedWriter writer,
+									 String filename) {
+		try {
 			String line = null;
 			StringBuffer ret = new StringBuffer();
 			while ((line = reader.readLine()) != null) {
 				writer.append(line+"\n");
 			}
-			reader.close();
-			writer.close();
 			return ret.toString();
 		} catch (NullPointerException npe) {
 			String msg = "Failed to copy file for backup [" + filename + "].";
 			_log.error(msg, npe);
 			throw new InvalidImplementationException(msg, npe);
-		} catch (FileNotFoundException fe) {
-			String msg = "Failed to find file for backup [" + filename + "].";
-			_log.error(msg, fe);
-			throw new InvalidImplementationException(msg, fe);
 		} catch (IOException ioe) {
 			String msg = "Cannot access file for backup [" + filename + "].";
 			_log.error(ioe, ioe);
 			throw new InvalidImplementationException(msg, ioe);
+		} finally {
+			try {
+				reader.close();
+				writer.close();			
+			} catch (IOException e) { 
+				// ignore 
+			}
+		}
+	}
+	
+	/**
+	 * Helper class that tries to load an existing file from various location, 
+	 * including direct file location, relative to classpath, relative to project source.
+	 * The order of search is: absolute, relative to source, relative to classpath.
+	 * @param name
+	 * @return
+	 * @throws FileNotFoundException 
+	 */
+	public static InputStream getFileStream(String name) throws FileNotFoundException {
+		File file = new File(name);
+		if (file.isAbsolute()) {
+			return new FileInputStream(file);
+		} else {
+			// check relative to source
+			if (file.exists()) {
+				return new FileInputStream(file);
+			} else {
+				return FileUtil.class.getClassLoader().getResourceAsStream(name);
+			}
 		}
 	}
 
@@ -335,7 +415,8 @@ public class FileUtil {
 	}
 	
 	/**
-	 * Saves the properties to a specified filename
+	 * Saves the properties to a specified filename in a sorted manner.
+	 * 
 	 * @param filename
 	 * @param properties
 	 * @param header
@@ -389,17 +470,16 @@ public class FileUtil {
 				byte[] md5sumbytes = msgDigest.digest(); // get the MD5
 				char[] md5sumchars = Hex.encodeHex(md5sumbytes); // make it readable
 				md5sum = String.copyValueOf(md5sumchars);
-				_log.info("Processed MD5 sum [" + md5sum + "]");
+				_log.debug("Processed MD5 sum [" + md5sum + "]");
 			} catch (IOException e) {
-				_log.error("Unable to process MD5 from file!", e);
+				_log.error("Unable to process MD5 from file ["+file.getAbsolutePath()+"]", e);
 			} finally {
 				try {
 					inputStream.close();
 				} catch (IOException e) {
 					_log.error("Unable to close input stream!", e);
 				}
-			}
-			
+			}			
 		} catch (NoSuchAlgorithmException nosae) {
 			_log.error(nosae, nosae);
 		} catch (FileNotFoundException fnfe) {
