@@ -344,12 +344,17 @@ public class CrudUtil {
 				for (Object item:list) {
 					if (ctr++>0)
 						comma += ", ";
+					if (SystemCodes.class.isAssignableFrom(item.getClass())) {
+						SystemCodes entity  = (SystemCodes) item;
+						// use id 
+						comma += "'" + entity.getKey() + "'";
+					} else
 					if (BaseEntity.class.isAssignableFrom(item.getClass())) {
 						BaseEntity entity  = (BaseEntity) item;
 						// use id 
 						comma += entity.getId();
 					} else
-						comma += item.toString();
+						comma += "'" + item.toString() + "'";
 				}
 				sql = sql.replace(sqlMatcher.group(), comma);				
 			} else
