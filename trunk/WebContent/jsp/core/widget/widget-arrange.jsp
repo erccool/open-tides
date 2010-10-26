@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="idy" tagdir="/WEB-INF/tags"%>
-<%@page import="org.opentides.util.WidgetConfiguration"%>
+<%@page import="org.opentides.service.WidgetService"%>
  <% response.setHeader("Cache-Control","no-cache"); //HTTP 1.1 
      response.setHeader("Pragma","no-cache"); //HTTP 1.0 
      response.setDateHeader ("Expires", 0); //prevents caching 
@@ -54,7 +54,7 @@
 </idy:header>
      
 <%
-int widgetConfigMinimize = WidgetConfiguration.WIDGET_STATUS_MINIMIZE;
+int widgetConfigMinimize = WidgetService.WIDGET_STATUS_MINIMIZE;
 pageContext.setAttribute("widgetConfigMinimize",widgetConfigMinimize);
 %>
 

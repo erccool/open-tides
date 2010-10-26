@@ -1,4 +1,4 @@
-<%@page import="org.opentides.util.WidgetConfiguration"%>
+<%@page import="org.opentides.service.WidgetService"%>
 <%@ page contentType="text/html;utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -13,9 +13,9 @@
      response.setHeader("Cache-Control","no-store"); //HTTP 1.1 
 %>
 <%
-int widgetConfigMinimize = WidgetConfiguration.WIDGET_STATUS_MINIMIZE;
+int widgetConfigMinimize = WidgetService.WIDGET_STATUS_MINIMIZE;
 pageContext.setAttribute("widgetConfigMinimize",widgetConfigMinimize);
-int widgetConfigShow = WidgetConfiguration.WIDGET_STATUS_SHOW;
+int widgetConfigShow = WidgetService.WIDGET_STATUS_SHOW;
 pageContext.setAttribute("widgetConfigShow",widgetConfigShow);
 %>
 
