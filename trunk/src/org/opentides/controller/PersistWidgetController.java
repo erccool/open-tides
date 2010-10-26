@@ -27,8 +27,8 @@ import org.opentides.bean.UserWidgets;
 import org.opentides.bean.user.BaseUser;
 import org.opentides.service.UserService;
 import org.opentides.service.UserWidgetsService;
+import org.opentides.service.WidgetService;
 import org.opentides.util.AcegiUtil;
-import org.opentides.util.WidgetConfiguration;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
@@ -90,8 +90,8 @@ public class PersistWidgetController extends MultiActionController {
 		
 		String status = req.getParameter("status");
 		//must be a valid state before processing the code...
-		if (status.equals(""+WidgetConfiguration.WIDGET_STATUS_MINIMIZE) || status.equals(""+WidgetConfiguration.WIDGET_STATUS_SHOW) 
-				|| status.equals(""+WidgetConfiguration.WIDGET_STATUS_REMOVE)) {
+		if (status.equals(""+WidgetService.WIDGET_STATUS_MINIMIZE) || status.equals(""+WidgetService.WIDGET_STATUS_SHOW) 
+				|| status.equals(""+WidgetService.WIDGET_STATUS_REMOVE)) {
 			String widgetName = req.getParameter("widgetName");
 			BaseUser user = userService.load(AcegiUtil.getSessionUser().getRealId());
 			UserWidgets userWidgets = userWidgetsService.findSpecificUserWidgets(user, widgetName);

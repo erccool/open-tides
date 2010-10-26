@@ -29,7 +29,6 @@ import org.opentides.service.UserService;
 import org.opentides.service.UserWidgetsService;
 import org.opentides.service.WidgetService;
 import org.opentides.util.AcegiUtil;
-import org.opentides.util.WidgetConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -108,7 +107,7 @@ public class UserWidgetsServiceImpl extends BaseCrudServiceImpl<UserWidgets>
 	}
 
 	public void updateUserWidgetsStatus(UserWidgets userWidgets, Integer status) {
-		if (status == WidgetConfiguration.WIDGET_STATUS_REMOVE) {
+		if (status == WidgetService.WIDGET_STATUS_REMOVE) {
 			this.delete(userWidgets.getId());
 		}else {
 			userWidgets.setStatus(status);

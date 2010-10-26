@@ -32,6 +32,14 @@ import org.opentides.bean.Widget;
  
 public interface WidgetService extends BaseCrudService<Widget> {
 //-- Start custom codes. Do not delete this comment line.
+
+	// not shown
+	public static final int WIDGET_STATUS_REMOVE    = 0;
+	// shown
+	public static final int WIDGET_STATUS_SHOW      = 1;
+	// minimized
+	public static final int WIDGET_STATUS_MINIMIZE  = 2;
+
 	/**
 	 * Returns the widget object based on the given name
 	 * @param name
