@@ -66,6 +66,11 @@ public class HibernateUtil {
      * Optional but if this has value, url, username and password is ignored.
      */
     private static String jndiPath;
+    
+    /**
+     * Persistence name in hibernate.
+     */
+    private static String persistenceUnitName = "hibernateConfig";
 
     /**
      * Static initializer to establish database connection.
@@ -78,7 +83,7 @@ public class HibernateUtil {
         	Set<String> entityClasses = db.getAnnotationIndex().get(javax.persistence.Entity.class.getName());
             // Create the SessionFactory
         	AnnotationConfiguration ac =  new AnnotationConfiguration();
-        	Properties properties = XMLPersistenceUtil.getProperties("META-INF/persistence.xml", "hibernateConfig");
+        	Properties properties = XMLPersistenceUtil.getProperties("META-INF/persistence.xml", persistenceUnitName);
         	ac.setProperties(properties);
         	if (StringUtil.isEmpty(jndiPath)) {
 	            ac.setProperty("hibernate.connection.driver_class", driverClassName);
@@ -133,7 +138,23 @@ public class HibernateUtil {
 		HibernateUtil.password = password;
 	}
 
+	/**
+	 * When jndiPath is set, other database settings 
+	 * (e.g. driverClassName, url, username and password)
+	 * are ignored.
+	 * 
+	 * @param jndiPath
+	 */
 	public void setJndiPath(String jndiPath) {
 		HibernateUtil.jndiPath = jndiPath;
+	}
+
+	/**
+	 * Setter method for persistenceUnitName.
+	 *
+	 * @param persistenceUnitName the persistenceUnitName to set
+	 */
+	public static final void setPersistenceUnitName(String persistenceUnitName) {
+		HibernateUtil.persistenceUnitName = persistenceUnitName;
 	}
 }
