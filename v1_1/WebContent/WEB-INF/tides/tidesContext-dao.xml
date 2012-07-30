@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+<beans xmlns="http://www.springframework.org/schema/beans"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">	
+	  
+     <!--  DAO's -->
+	<bean id="auditLogDAO" class="org.opentides.persistence.impl.AuditLogDAOImpl">
+			<property name="properties" ref="jpqlProperties" />
+	</bean>
+	<bean id="systemCodesDAO" class="org.opentides.persistence.impl.SystemCodesDAOJpaImpl" parent="baseDAO" autowire="byName" />	
+	<bean id="userDefinedFieldDAO" class="org.opentides.persistence.impl.UserDefinedFieldDAOJpaImpl" parent="baseDAO" autowire="byName" />	
+	<bean id="userDefinedRecordDAO" class="org.opentides.persistence.impl.UserDefinedRecordDAOJpaImpl" parent="baseDAO" autowire="byName" />	
+	<bean id="fileInfoDAO" class="org.opentides.persistence.impl.FileInfoDAOJpaImpl" parent="baseDAO"/>	
+	<bean id="passwordResetDAO" class="org.opentides.persistence.impl.PasswordResetDAOJpaImpl" parent="baseDAO"/>
+	<bean id="coreUserDAO" class="org.opentides.persistence.impl.UserDAOImpl" parent="baseDAO">
+		<property name="securityFilter">
+			<ref bean="baseUserSecurityFilterMap" />
+		</property>
+	</bean>
+	<bean id="userGroupDAO" class="org.opentides.persistence.impl.UserGroupDAOJpaImpl" parent="baseDAO" />
+	<bean id="widgetDAO" class="org.opentides.persistence.impl.WidgetDAOJpaImpl" parent="baseDAO"/>	
+	<bean id="reportDAO" class="org.opentides.persistence.impl.ReportDAOJpaImpl" parent="baseDAO"/>	
+	<bean id="userWidgetsDAO" class="org.opentides.persistence.impl.UserWidgetsDAOJpaImpl" parent="baseDAO"/>	
+</beans>

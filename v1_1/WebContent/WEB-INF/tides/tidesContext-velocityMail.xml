@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!--  VELOCITY ENGINE -->
+	<bean id="velocityEngine"
+		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+		<property name="resourceLoaderPath" value="/WEB-INF/template/"/>	
+		<!-- 	
+		<property name="configLocation"><value>classpath:resources/velocity.properties</value></property>
+		<property name="velocityProperties">
+			<props>
+				<prop key="resource.loader">class</prop>
+				<prop key="class.resource.loader.class">
+					org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+				</prop>
+			</props>
+		</property>
+		 --> 
+	</bean>
+		
+	<!-- MAIL SENDER -->
+	<bean id="mailSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host">
+			<value>${mail.server.domain}</value>
+		</property>
+		<property name="username">
+			<value>${mail.server.username}</value>
+		</property>
+		<property name="password">
+			<value>${mail.server.password}</value>
+		</property>
+		<property name="port">
+			<value>${mail.server.port}</value>
+		</property>
+		<property name="javaMailProperties">
+        	<props>
+	  			<prop key="mail.smtp.auth">true</prop>
+	  			<!-- used by gmail smtp server -->
+				<prop key="mail.smtp.starttls.enable">true</prop>
+  			</props>
+  		</property>
+	</bean>
+	
+	<bean id="mailingContext" class="org.opentides.mail.MailingContext" autowire="byName">
+		<property name="mailSender" ref="mailSender" />
+		<property name="velocityEngine" ref="velocityEngine" />
+	</bean>	
+	
+	<!-- QUARTZ CONFIGURATION -->
+	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		destroy-method="destroy">
+		<property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+		<property name="configLocation" value="classpath:resources/quartz.properties"/>
+	</bean>
+	
+	<bean id="mailingService" class="org.opentides.service.impl.MailingServiceImpl" autowire="byName">
+		<property name="scheduler" ref="schedulerFactory"/>
+	</bean>
+	
+	<!-- bean id="messagePreparator" class="org.opentides.mail.VelocityMimeMessagePreparator" autowire="byName" / -->
+	
+	<!-- sample message for automatic alert
+	<bean id="sampleMessage"
+		class="org.opentides.mail.VelocityMimeMessagePreparator">
+		<property name="to" value="rjimenez@ideyatech.com" />
+		<property name="from">
+			<value>mail@apress.com</value>
+		</property>
+		<property name="subject">
+			<value>Sample Mail Using Velocity</value>
+		</property>
+		<property name="plainTextTemplate">
+			<value>plainText.vm</value>
+		</property>
+		 <property name="htmlTemplate">
+			<value>html.vm</value>
+		</property> 
+		<property name="velocityEngine">
+			<ref bean="velocityEngine" />
+		</property>
+	</bean>
+	-->
+	
+	<!-- mail service for automatic alert
+	<bean id="sampleMailService"
+		class="org.opentides.mail.service.MailServiceImpl">
+		<property name="sender">
+			<ref bean="mailSender" />
+		</property>
+		<property name="preparator">
+			<ref bean="sampleMessage" />
+		</property>
+	</bean>
+	-->
+	
+	<!-- configure message alert by quartz 
+	<bean id="sampleMailAlertJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="sampleMailService" />
+		</property>
+		<property name="targetMethod">
+			<value>sendVelocityMail</value>
+		</property>
+	</bean>
+	-->	
+</beans>
