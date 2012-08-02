@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/util 
+    http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    
+	<!-- URL mapping to Controller -->
+	<bean id="applicationUrlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/index.jspx">viewMapController</prop>
+				<prop key="/home.jspx">viewMapController</prop>				
+			</props>
+		</property>
+	</bean>
+	
+	<!-- Generic view mapping to load initial pages -->
+	<bean id="viewMapController" class="org.opentides.controller.ViewMapController">
+		<property name="viewMap">
+		<map>
+			<entry key="index.jspx" value="login"/>
+			<entry key="home.jspx" value="home"/>
+		</map>
+		</property>
+		<property name="defaultView" value="home"/>
+	</bean>
+</beans>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+	<diskStore path="java.io.tmp"/>
+	
+	<defaultCache
+        maxElementsInMemory="20000"
+        eternal="false"
+        timeToIdleSeconds="120"
+        timeToLiveSeconds="120"
+        overflowToDisk="true"
+        diskPersistent="false"
+        diskExpiryThreadIntervalSeconds="120"
+        />
+
+	<cache name="UserImageCache"
+  		maxEntriesLocalHeap="100"
+  		eternal="true"
+  		memoryStoreEvictionPolicy="LFU"
+  		overflowToDisk="false">
+	</cache>
+
+    <cache name="org.hibernate.cache.StandardQueryCache"
+		maxEntriesLocalHeap="1000"
+		eternal="false"
+		timeToLiveSeconds="120"
+		overflowToDisk="true"/>
+		
+	<cache
+		name="org.hibernate.cache.UpdateTimestampsCache"
+		maxEntriesLocalHeap="1000"
+		eternal="true"
+		overflowToDisk="true"/>	
+        
+	<cache name="org.opentides.bean.SystemCodes"
+		maxEntriesLocalHeap="5000"
+		eternal="false"
+		timeToIdleSeconds="3000"
+		timeToLiveSeconds="6000"
+		overflowToDisk="true" />
+	
+	<cache name="org.opentides.bean.user.BaseUser"
+		maxEntriesLocalHeap="2000"
+		eternal="false"
+		timeToIdleSeconds="3000"
+		timeToLiveSeconds="6000"
+		overflowToDisk="true" />
+
+	<cache name="org.opentides.bean.user.UserCredential"
+		maxEntriesLocalHeap="2000"
+		eternal="false"
+		timeToIdleSeconds="3000"
+		timeToLiveSeconds="6000"
+		overflowToDisk="true" />
+
+</ehcache>

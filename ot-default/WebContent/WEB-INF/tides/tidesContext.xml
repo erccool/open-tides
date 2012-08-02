@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+ 	<!-- Message source for this context, loaded from localized "messages_xx" files -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<ref local="applicationMessages" />
+		</property>
+	</bean>
+
+	<bean id="applicationMessages" class="org.opentides.bean.MergeListFactoryBean">
+		<property name="sourceList">
+			<list>
+				<value>classpath:resources/languages/messages</value>
+				<value>classpath:resources/languages/core-messages</value>			
+			</list>
+		</property>
+		<property name="secondList" ref="additionalMessages"/>
+	</bean>
+
+	<!-- Hibernate Utility -->
+	<bean id="hibernateUtil" class="org.opentides.util.HibernateUtil" init-method="initialize">
+		<property name="jndiPath" value="${database.jndi}" />
+	</bean>	
+	
+	<bean id="securityUtil" class="org.opentides.util.SecurityUtil" autowire="byName" />
+
+	<!-- Default View Resolver -->	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="cache" value="false"/>
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/jsp/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>	
+	
+	<!-- Spring Theme Source and Resolver -->
+	<bean id="themeSource" class="org.springframework.ui.context.support.ResourceBundleThemeSource">
+		<property name="basenamePrefix" value="resources/themes/"/>
+	</bean>	
+	
+	<bean id="themeResolver" class="org.springframework.web.servlet.theme.FixedThemeResolver">
+		<property name="defaultThemeName" value="${theme.name}"/>
+	</bean>
+	
+	<!-- Application Startup Listener -->
+	<bean id="startupListener" class="org.opentides.listener.ApplicationStartupListener">
+		<property name="debug" value="${application.mode.debug}"/>
+		<property name="propertyName" value="${property.name}"/>
+		<property name="evolveManager" ref="evolveManager"/>
+	</bean>
+	
+	<!-- Audit Log Listener 
+		Declaration of bean below is only to initialize autoLoadObject property.
+		Default value is true, but this may slow down loading of audit logs.
+	-->
+	<bean id="auditLogListener" class="org.opentides.persistence.listener.AuditLogListener">
+		<property name="autoLoadObjects" value="${auditlog.autoloadobjects}" />
+	</bean>
+
+</beans>

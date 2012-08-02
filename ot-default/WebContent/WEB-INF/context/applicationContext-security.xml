@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<sec:http auto-config='false' use-expressions="true" access-decision-manager-ref="httpRequestAccessDecisionManager">
+		
+		<sec:intercept-url pattern="/login.jspx*" filters="none"/>
+		<!-- <sec:intercept-url pattern="/widgetDisplay.jspx*" access="hasIpAddress('127.0.0.1/24') OR hasIpAddress('::1/128')"/> -->
+		<sec:intercept-url pattern="/request-password-reset.jspx*" filters="none" />		
+		<sec:intercept-url pattern="/change-password.jspx*" filters="none" />		
+		<sec:intercept-url pattern="/confirm-password-reset.jspx*" filters="none" />		
+		<sec:intercept-url pattern="/themes/**" filters="none" />
+		<sec:intercept-url pattern="/themes/images/**" filters="none" />
+		<sec:intercept-url pattern="/styles/**" filters="none" />
+		<sec:intercept-url pattern="/images/**" filters="none" />
+		<sec:intercept-url pattern="/script/**" filters="none" />		
+		<sec:intercept-url pattern="/**" access="isAuthenticated()" />
+		
+		<sec:form-login login-page="/login.jspx"
+			default-target-url="/home.jspx" authentication-failure-url="/login.jspx?login_error=authentication-failed"/>
+		
+		<sec:anonymous />
+		
+		<sec:http-basic />
+		
+		<sec:logout invalidate-session="true" logout-success-url="/login.jspx?login_error=logout"/>
+		
+		<sec:remember-me key="${application.name}" />
+		
+		<sec:session-management invalid-session-url="/login.jspx?login_error=expired-session">
+			<sec:concurrency-control max-sessions="1" expired-url="/login.jspx?login_error=invalid-session" session-registry-alias="sessionRegistry" />
+		</sec:session-management>
+		
+	</sec:http>
+
+	<sec:authentication-manager>
+		<sec:authentication-provider user-service-ref="authenticationService">
+		    <sec:password-encoder ref="passwordEncoder" />
+		</sec:authentication-provider>
+	</sec:authentication-manager>
+    
+	<bean id="authenticationService" class="org.opentides.persistence.impl.AuthenticationDAOJdbcImpl">
+		<property name="dataSource"><ref bean="dataSource"/></property>	
+		<property name="usersByUsernameQuery">
+			<value>SELECT username,password,enabled FROM USERS WHERE username=?</value>
+		</property>
+		<property name="authoritiesByUsernameQuery">
+			<value>SELECT u.username,authority from USERS as u,USER_GROUP as g,AUTHORITIES as a where u.userid=g.user_id AND g.group_id = a.usergroup_id AND u.username=?</value>
+		</property>	
+    </bean>
+	
+	<bean id="httpRequestAccessDecisionManager"
+		class="org.springframework.security.access.vote.AffirmativeBased">
+		<property name="allowIfAllAbstainDecisions">
+			<value>false</value>
+		</property>
+		<property name="decisionVoters">
+			<list>
+				<ref bean="roleVoter" />
+				<ref bean="authenticatedVoter" />
+				<ref bean="expressionVoter" />
+				<ref bean="superUserVoter" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="roleVoter" class="org.springframework.security.access.vote.RoleVoter">
+		<property name="rolePrefix" value="ROLE_" />
+	</bean>
+
+	<bean id="authenticatedVoter"
+		class="org.springframework.security.access.vote.AuthenticatedVoter" />
+
+	<bean id="expressionVoter"
+		class="org.springframework.security.web.access.expression.WebExpressionVoter" />
+
+	<bean id="superUserVoter" class="org.opentides.security.SuperUserVoter" />
+
+	<bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+		<constructor-arg value="256" />
+	</bean>
+	
+	<!-- List of user permissions -->
+	<bean id="rolesMap" class="org.springframework.beans.factory.config.MapFactoryBean">
+		<property name="sourceMap">	
+			<map>
+				<entry key="ROLE_ADMIN"><value>Administrator</value></entry>
+				<entry key="ROLE_GUEST"><value>Guest</value></entry>
+			</map>
+		</property>
+	</bean>
+
+</beans>
